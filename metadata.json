@@ -1,0 +1,7 @@
+{
+  "name": "LTP - Long Term Partner",
+  "description": "Aplikasi investasi dan trading market finansial LTP (Long Term Partner) dengan dark mode elegan, candlestick chart real-time, manajemen portofolio saldo, dan navigasi ramah mobile.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
