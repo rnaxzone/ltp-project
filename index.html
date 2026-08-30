@@ -213,12 +213,18 @@
         </div>
 
         <!-- Right Header Actions -->
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-1.5">
+          <!-- Account Mode (Live / Demo) Toggle -->
+          <button id="accountModeBadge" onclick="toggleDemoAccountMode()" class="flex items-center space-x-1 px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-bold text-emerald-400 hover:bg-emerald-500/20 transition-all active:scale-95" title="Klik untuk beralih mode Akun Live / Demo">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" id="accountModeIndicator"></span>
+            <span id="accountModeText">Live</span>
+          </button>
+
           <!-- Language Switcher Button -->
-          <button id="langSwitcherBtn" onclick="toggleLanguage()" class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-[#18181C] hover:bg-[#222228] border border-white/10 text-xs font-semibold text-gray-300 hover:text-white transition-all active:scale-95" title="Ganti Bahasa / Switch Language">
-            <span id="currentLangFlag" class="text-sm">🇮🇩</span>
-            <span id="currentLangText" class="text-xs uppercase">ID</span>
-            <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button id="langSwitcherBtn" onclick="toggleLanguage()" class="flex items-center space-x-1 px-2 py-1 rounded-lg bg-[#18181C] hover:bg-[#222228] border border-white/10 text-xs font-semibold text-gray-300 hover:text-white transition-all active:scale-95" title="Ganti Bahasa / Switch Language">
+            <span id="currentLangFlag" class="text-xs">🇮🇩</span>
+            <span id="currentLangText" class="text-[11px] uppercase">ID</span>
+            <svg class="w-2.5 h-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
@@ -289,18 +295,15 @@
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
-                <span>+8.15% <span class="hidden sm:inline">(24h)</span></span>
+                <span id="heroGrowthBadge">0.00%</span> <span class="hidden sm:inline">(24h)</span>
               </div>
             </div>
 
-            <!-- Big Balance Amount & Rupiah Estimation -->
+            <!-- Big Balance Amount -->
             <div class="my-2">
               <h1 id="totalBalanceText" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white font-mono">
-                $9,320.50 USD
+                $0.00
               </h1>
-              <p id="totalBalanceIdrEst" class="text-xs text-gray-400 font-medium mt-1">
-                ≈ Rp 147.263.900 IDR <span class="text-emerald-400 text-[11px] font-semibold">(Kurs $1 = Rp 15.800)</span>
-              </p>
             </div>
 
             <!-- Clean Portfolio Accumulation Graph (Without filter buttons) -->
@@ -308,8 +311,8 @@
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-[11px] text-gray-400 font-medium" data-i18n="sparkline_trend">Grafik Akumulasi Portofolio</span>
                 <span class="text-[10px] text-emerald-400 font-mono font-medium flex items-center space-x-1">
-                  <span>Tren Pertumbuhan Positif</span>
-                  <span class="text-xs">▲</span>
+                  <span id="portfolioTrendText">Akun Baru (Garis Datar / $0.00)</span>
+                  <span id="portfolioTrendArrow" class="text-xs">—</span>
                 </span>
               </div>
 
@@ -323,12 +326,12 @@
                     </linearGradient>
                   </defs>
                   <!-- Gradient Area -->
-                  <path id="graphArea" d="M 0,65 Q 60,50 120,52 T 240,30 T 330,35 T 400,10 L 400,80 L 0,80 Z" fill="url(#emeraldGrad)"/>
+                  <path id="graphArea" d="M 0,65 L 400,65 L 400,65 L 0,65 Z" fill="url(#emeraldGrad)"/>
                   <!-- Glowing Stroke Line -->
-                  <path id="graphLine" d="M 0,65 Q 60,50 120,52 T 240,30 T 330,35 T 400,10" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path id="graphLine" d="M 0,65 L 400,65" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                   <!-- Data Dots -->
-                  <circle cx="400" cy="10" r="3.5" fill="#10B981" class="animate-ping" opacity="0.75"/>
-                  <circle cx="400" cy="10" r="3.5" fill="#10B981" stroke="#0D0D0D" stroke-width="1.5"/>
+                  <circle id="graphDotPing" cx="400" cy="65" r="3.5" fill="#10B981" class="opacity-0"/>
+                  <circle id="graphDot" cx="400" cy="65" r="3.5" fill="#6B7280" stroke="#0D0D0D" stroke-width="1.5"/>
                 </svg>
               </div>
             </div>
@@ -369,12 +372,12 @@
                   <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold tracking-wider uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-mono" data-i18n="status_total">TOTAL</span>
                 </div>
                 <p class="text-[11px] text-gray-300 font-bold truncate" data-i18n="card_total_bal">Total Saldo Saat Ini</p>
-                <h3 id="cardTotalBalVal" class="text-base sm:text-lg font-black text-white font-mono mt-0.5 user-balance-val">$9,320.50</h3>
+                <h3 id="cardTotalBalVal" class="text-base sm:text-lg font-black text-white font-mono mt-0.5 user-balance-val">$0.00</h3>
               </div>
               <p class="text-[10px] text-emerald-400/90 font-medium mt-2 pt-1.5 border-t border-white/5 truncate">Akumulasi Seluruh Aset</p>
             </div>
 
-            <!-- 2. Saldo Deposit -->
+            <!-- 2. Saldo Tersedia -->
             <div onclick="openBalanceDetail('deposit')" class="cursor-pointer glass-card neon-glow p-3.5 relative overflow-hidden transition-all duration-200 hover:-translate-y-0.5 flex flex-col justify-between h-full">
               <div>
                 <div class="flex items-center justify-between mb-2">
@@ -385,10 +388,10 @@
                   </div>
                   <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" data-i18n="status_active">AKTIF</span>
                 </div>
-                <p class="text-[11px] text-gray-400 font-medium truncate" data-i18n="card_deposit_bal">Saldo Deposit</p>
-                <h3 id="cardDepositBalVal" class="text-base sm:text-lg font-bold text-white font-mono mt-0.5 user-balance-val">$5,000.00</h3>
+                <p class="text-[11px] text-gray-400 font-medium truncate" data-i18n="card_deposit_bal">Saldo Tersedia</p>
+                <h3 id="cardDepositBalVal" class="text-base sm:text-lg font-bold text-white font-mono mt-0.5 user-balance-val">$0.00</h3>
               </div>
-              <p class="text-[10px] text-gray-500 mt-2 pt-1.5 border-t border-white/5 truncate">Modal Utama Trading</p>
+              <p class="text-[10px] text-gray-500 mt-2 pt-1.5 border-t border-white/5 truncate">Siap digunakan untuk transaksi</p>
             </div>
 
             <!-- 3. Komisi Profit -->
@@ -400,33 +403,32 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                   </div>
-                  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-amber-500/15 text-amber-400 border border-amber-500/30" title="Terkunci (Cair di Hari ke-100)">TERKUNCI</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-amber-500/15 text-amber-400 border border-amber-500/30">PROFIT</span>
                 </div>
                 <p class="text-[11px] text-gray-300 font-semibold truncate" data-i18n="card_profit_com">Komisi Profit</p>
-                <h3 id="cardProfitBalVal" class="text-base sm:text-lg font-bold text-emerald-400 font-mono mt-0.5 user-balance-val">$1,820.50</h3>
+                <h3 id="cardProfitBalVal" class="text-base sm:text-lg font-bold text-emerald-400 font-mono mt-0.5 user-balance-val">$0.00</h3>
               </div>
-              <p class="text-[10px] text-amber-400 font-medium mt-2 pt-1.5 border-t border-white/5 truncate flex items-center space-x-1">
-                <span>🔒</span>
-                <span>Terkunci (Cair di Hari ke-100)</span>
+              <p class="text-[10px] text-amber-400/90 font-medium mt-2 pt-1.5 border-t border-white/5 truncate">
+                Akumulasi Hasil Profit
               </p>
             </div>
 
-            <!-- 4. Kunci Dana 100 Hari -->
+            <!-- 4. Investasi -->
             <div onclick="openBalanceDetail('locked100')" class="cursor-pointer glass-card neon-glow p-3.5 relative overflow-hidden transition-all duration-200 hover:-translate-y-0.5 flex flex-col justify-between h-full border-amber-500/30">
               <div>
                 <div class="flex items-center justify-between mb-2">
                   <div class="w-7 h-7 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6M20 4v6M4 20h16"/>
                     </svg>
                   </div>
-                  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-amber-500/15 text-amber-400 border border-amber-500/30" data-i18n="status_locked">TERKUNCI</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-amber-500/15 text-amber-400 border border-amber-500/30" data-i18n="status_locked">INVESTASI</span>
                 </div>
-                <p class="text-[11px] text-gray-400 font-medium truncate" data-i18n="card_locked_100">Kunci Dana 100 Hari</p>
-                <h3 id="cardLockedBalVal" class="text-base sm:text-lg font-bold text-white font-mono mt-0.5 user-balance-val">$2,500.00</h3>
+                <p class="text-[11px] text-gray-400 font-medium truncate" data-i18n="card_locked_100">Investasi</p>
+                <h3 id="cardLockedBalVal" class="text-base sm:text-lg font-bold text-white font-mono mt-0.5 user-balance-val">$0.00</h3>
               </div>
               <div class="flex items-center space-x-1 mt-2 pt-1.5 border-t border-white/5 text-[10px] text-amber-400/90 font-medium truncate">
-                <span id="homeCardLockedRemaining">⏱️ Sisa 62 Hari</span>
+                <span id="homeCardLockedRemaining">Sisa waktu: -</span>
               </div>
             </div>
 
@@ -518,37 +520,10 @@
             <button onclick="switchTab('tab-reports')" class="text-[11px] text-emerald-400 hover:underline" data-i18n="see_more">Selengkapnya</button>
           </div>
 
-          <div class="space-y-2.5">
-            <!-- Item 1 -->
-            <div class="flex items-center justify-between text-xs">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-400">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-semibold text-white">Daily Trading Reward</p>
-                  <p class="text-[10px] text-gray-500">Hari ini, 09:30 WIB • Auto Credit</p>
-                </div>
-              </div>
-              <span class="font-mono font-bold text-emerald-400">+$24.50 USD</span>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="flex items-center justify-between text-xs">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-7 h-7 rounded-full bg-blue-500/15 flex items-center justify-center text-blue-400">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-semibold text-white">Deposit USDT (TRC20)</p>
-                  <p class="text-[10px] text-gray-500">Kemarin, 14:15 WIB • Sukses</p>
-                </div>
-              </div>
-              <span class="font-mono font-bold text-white">+$500.00 USD</span>
+          <div id="homeRecentActivityList" class="space-y-2.5">
+            <div class="text-center py-5 text-gray-500 text-xs">
+              <span class="block">Belum ada mutasi transaksi.</span>
+              <span class="text-[10px] text-gray-600">Saldo awal akun Live Anda adalah $0.00 USD.</span>
             </div>
           </div>
         </div>
@@ -556,245 +531,170 @@
       </section>
 
       <!-- ============================================== -->
-      <!-- VIEW 2: INVESTASI (INVESTMENT & VAULT 100 HARI)-->
+      <!-- VIEW 2: INVESTASI (CLEAN & ELEGANT)             -->
       <!-- ============================================== -->
       <section id="view-invest" class="tab-view hidden space-y-4">
         
-        <!-- HEADER BANNER -->
-        <div class="bg-gradient-to-r from-emerald-950/50 via-[#101915] to-black rounded-2xl p-4 border border-emerald-500/30 shadow-xl">
-          <div class="flex items-center space-x-2">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30">VAULT FULL LOCK-UP 100 HARI</span>
-            <span class="text-[10px] text-amber-400 font-mono font-semibold">PROFIT 1.0% / HARI (DIKUNCI 100 HARI)</span>
+        <!-- 1. HEADER RINGKAS & ELEGAN -->
+        <div class="flex items-center justify-between px-0.5 pt-1">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span data-i18n="invest_headline">Program Investasi</span>
+            </h2>
+            <p class="text-xs text-gray-400 mt-0.5">Imbal hasil 1.0% per hari dengan masa aktif 100 hari</p>
           </div>
-          <h2 class="text-lg sm:text-xl font-extrabold text-white mt-2 tracking-wide" data-i18n="invest_headline">Paket Investasi LTP 100 Hari (Full Lock-Up)</h2>
-          <p class="text-xs text-gray-300 mt-1 leading-relaxed" data-i18n="invest_sub">
-            Kunci modal deposit Anda selama 100 hari untuk memperoleh profit harian <strong class="text-emerald-400">1.0% per hari</strong>. Seluruh profit harian dikumpulkan dan <strong class="text-amber-400">DIKUNCI bersama modal utama selama 100 hari</strong>. Total Modal + Profit baru bisa ditarik (WD) sekaligus saat timer 100 hari habis (Jatuh Tempo).
-          </p>
+          <span id="activeInvestCountBadge" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
+            0 PAKET AKTIF
+          </span>
         </div>
 
-        <!-- 1. RINGKASAN PAKET INVESTASI RESMI (100 HARI) -->
-        <div class="glass-card neon-glow p-4 relative overflow-hidden border border-emerald-500/30">
-          <div class="flex items-start justify-between mb-3">
+        <!-- 2. CARD UTAMA: INVESTASI AKTIF SAYA (1 CARD UTAMA RAPI & ELEGAN) -->
+        <div class="glass-card neon-glow p-4 sm:p-5 relative overflow-hidden border border-emerald-500/30">
+          <div class="absolute -top-10 -right-10 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="relative z-10 space-y-3.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6M20 4v6M4 20h16"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xs font-bold uppercase tracking-wider text-gray-200">Investasi Aktif Saya</h3>
+                  <p id="investRemainingDaysText" class="text-[10px] text-gray-400">0 Paket Aktif</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-gray-400 block">Sisa Waktu</span>
+                <span id="investCountdownDisplay" class="text-xs font-mono font-bold text-amber-400">0h 0j 0m 0d</span>
+              </div>
+            </div>
+
+            <!-- 2 Kolom Ringkasan: Nominal Investasi & Profit Terkumpul -->
+            <div class="grid grid-cols-2 gap-2.5 pt-0.5">
+              <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5">
+                <span class="text-[10px] text-gray-400 block font-medium">Nominal Investasi</span>
+                <h4 id="investLockedVal" class="text-base sm:text-xl font-extrabold text-white font-mono mt-0.5 user-balance-val">$0.00</h4>
+              </div>
+
+              <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5">
+                <span class="text-[10px] text-gray-400 block font-medium">Profit Terkumpul</span>
+                <h4 id="investTotalProfitCollected" class="text-base sm:text-xl font-extrabold text-emerald-400 font-mono mt-0.5">+$0.00</h4>
+                <span id="investProfitCalcSub" class="hidden">0 Hari x $0.00/hari</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar & Status Tenor 100 Hari -->
+            <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span id="investProgressDaysText" class="text-gray-300 font-medium font-mono">Hari ke-0 / 100</span>
+                <span id="investProgressPctText" class="font-mono font-bold text-emerald-400">0% Selesai</span>
+              </div>
+              <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div id="investProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. FORM MULAI INVESTASI -->
+        <div class="glass-card p-4 sm:p-5 relative overflow-hidden border border-white/10">
+          <div class="flex items-center justify-between mb-3.5">
             <div>
-              <div class="flex items-center space-x-1.5">
-                <span class="text-xs">🔒</span>
-                <h3 class="text-base font-extrabold text-white">LTP 100-Day Yield Vault</h3>
-              </div>
-              <p class="text-[11px] text-gray-400 mt-0.5">Kontrak Penguncian Modal & Profit Penuh selama 100 Hari</p>
+              <h3 class="text-sm sm:text-base font-extrabold text-white">Mulai Investasi</h3>
+              <p class="text-[10px] text-gray-400">Pilih nominal untuk dialokasikan ke portofolio</p>
             </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">RESMI AKTIF</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono">+1.0% / HARI</span>
           </div>
 
-          <!-- 3 Kolom Ringkasan Parameter Paket -->
-          <div class="grid grid-cols-3 gap-2 bg-[#0A0B0E] p-3 rounded-xl border border-white/5 text-center">
-            <div class="p-1">
-              <span class="text-[10px] text-gray-400 block font-medium">Tenor Kunci</span>
-              <span class="text-sm sm:text-base font-black text-amber-400 font-mono mt-0.5 block">100 Hari</span>
-              <span class="text-[9px] text-amber-400 font-semibold">Full Lock-Up</span>
-            </div>
-            <div class="p-1 border-x border-white/5">
-              <span class="text-[10px] text-gray-400 block font-medium">Profit Harian</span>
-              <span class="text-sm sm:text-base font-black text-emerald-400 font-mono mt-0.5 block">1.0% / Hari</span>
-              <span class="text-[9px] text-amber-400 font-semibold">Terkunci 100 Hari</span>
-            </div>
-            <div class="p-1">
-              <span class="text-[10px] text-gray-400 block font-medium">Pencairan Total</span>
-              <span class="text-sm sm:text-base font-black text-cyan-400 font-mono mt-0.5 block">200% Total</span>
-              <span class="text-[9px] text-gray-400">Modal + Profit di Hari 100</span>
-            </div>
-          </div>
-
-          <!-- Aturan & Ketentuan Ringkas -->
-          <div class="mt-3 space-y-1.5 text-[11px] text-gray-300">
+          <!-- Saldo Tersedia Header -->
+          <div class="flex items-center justify-between text-xs bg-[#090A0E] p-3 rounded-xl border border-white/5 mb-3.5">
+            <span class="text-gray-400">Saldo Tersedia:</span>
             <div class="flex items-center space-x-2">
-              <span class="text-amber-400 font-bold text-xs">🔒</span>
-              <span>Profit <strong class="text-emerald-400">1.0% per hari</strong> dikumpulkan ke <strong>Komisi Profit</strong> & <span class="text-amber-400 font-semibold">DIKUNCI bersama modal (tidak bisa di-WD harian)</span>.</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span class="text-amber-400 font-bold text-xs">🔒</span>
-              <span>Modal pokok terkunci di <strong>Kunci Dana</strong> & <span class="text-amber-400 font-semibold">TIDAK BISA ditarik sampai 100 hari</span>.</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <span class="text-emerald-400 font-bold text-xs">✓</span>
-              <span>Total Modal + Seluruh Profit <strong class="text-emerald-400">bisa ditarik (WD) sekaligus</strong> saat timer 100 hari habis (Jatuh Tempo).</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. CARD "INVESTASI AKTIF SAYA" (LIVE COUNTDOWN & PROGRESS) -->
-        <div class="glass-card neon-glow p-4 relative overflow-hidden border border-amber-500/30">
-          <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2.5">
-            <div class="flex items-center space-x-2">
-              <div class="w-7 h-7 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-sm sm:text-base font-extrabold text-white">Investasi Aktif Saya</h3>
-                <p class="text-[10px] text-gray-400">Status Portofolio Terkunci & Countdown</p>
-              </div>
-            </div>
-            <span id="activeInvestCountBadge" class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/40">● 1 PAKET BERJALAN</span>
-          </div>
-
-          <!-- 4 Grid Metrik Investasi Aktif -->
-          <div class="grid grid-cols-2 gap-2.5 mb-3">
-            <div class="bg-[#090A0E] p-2.5 rounded-xl border border-white/5">
-              <span class="text-[10px] text-gray-400 block font-medium">Nominal Dikunci</span>
-              <h4 id="investLockedVal" class="text-base sm:text-lg font-black text-amber-400 font-mono mt-0.5 user-balance-val">$2,500.00</h4>
-              <span class="text-[9px] text-gray-500">Saldo Kunci Dana</span>
-            </div>
-
-            <div class="bg-[#090A0E] p-2.5 rounded-xl border border-white/5">
-              <span class="text-[10px] text-gray-400 block font-medium">Progress Kontrak</span>
-              <h4 id="investProgressDaysText" class="text-sm sm:text-base font-black text-white font-mono mt-0.5">Hari ke-38 / 100</h4>
-              <span id="investRemainingDaysText" class="text-[9px] text-amber-400 font-semibold">Sisa 62 Hari Lagi</span>
-            </div>
-
-            <div class="bg-[#090A0E] p-2.5 rounded-xl border border-white/5">
-              <span class="text-[10px] text-gray-400 block font-medium">Profit Terkumpul (Terkunci)</span>
-              <h4 id="investTotalProfitCollected" class="text-base sm:text-lg font-black text-emerald-400 font-mono mt-0.5">+$950.00</h4>
-              <span id="investProfitCalcSub" class="text-[9px] text-amber-400/90 font-medium">38 Hari x $25.00/hari</span>
-            </div>
-
-            <div class="bg-[#090A0E] p-2.5 rounded-xl border border-white/5">
-              <span class="text-[10px] text-gray-400 block font-medium">Hitung Mundur Pencairan</span>
-              <h4 id="investCountdownDisplay" class="text-xs sm:text-sm font-black text-amber-400 font-mono mt-1">61h 23j 45m 10d</h4>
-              <span class="text-[9px] text-gray-500">Pencairan Modal + Profit</span>
+              <strong id="investAvailableDeposit" class="text-white font-mono text-sm font-bold user-balance-val">$0.00</strong>
+              <button type="button" onclick="openDepositModal()" class="text-[11px] text-emerald-400 font-semibold hover:underline">+ Top Up</button>
             </div>
           </div>
 
-          <!-- Progress Bar Visual 100 Hari -->
-          <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5 space-y-2">
-            <div class="flex justify-between items-center text-[11px]">
-              <span class="text-gray-400">Progress Waktu Tenor:</span>
-              <span id="investProgressPctText" class="font-mono font-bold text-emerald-400">38% Selesai</span>
+          <!-- Input Nominal & Quick Choice Buttons -->
+          <div class="space-y-2.5 mb-3.5">
+            <label class="block text-xs font-semibold text-gray-300">Nominal Investasi:</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3.5 text-gray-400 font-mono font-bold text-sm">$</span>
+              <input type="number" id="investInputAmount" value="100" min="10" step="10" placeholder="0" oninput="calculateInvestPreview()" class="w-full pl-8 pr-14 py-2.5 rounded-xl bg-[#090A0E] border border-white/15 text-white font-mono text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30">
+              <span class="absolute right-3.5 text-xs text-gray-400 font-bold">USD</span>
             </div>
-            <div class="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
-              <div id="investProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 38%;"></div>
-            </div>
-            <div class="flex justify-between text-[9px] text-gray-500 font-mono">
-              <span>Hari 1 (Mulai)</span>
-              <span class="text-emerald-400 font-semibold">Hari 38 (Saat Ini)</span>
-              <span>Hari 100 (Pencairan Modal + Profit)</span>
+
+            <!-- Quick Choice Buttons: $10, $50, $100, $500, Max -->
+            <div class="grid grid-cols-5 gap-1.5 text-xs pt-0.5">
+              <button type="button" onclick="setInvestPreset(10)" class="py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-mono hover:text-white transition-colors text-center">$10</button>
+              <button type="button" onclick="setInvestPreset(50)" class="py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-mono hover:text-white transition-colors text-center">$50</button>
+              <button type="button" onclick="setInvestPreset(100)" class="py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-mono hover:text-white transition-colors text-center">$100</button>
+              <button type="button" onclick="setInvestPreset(500)" class="py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-mono hover:text-white transition-colors text-center">$500</button>
+              <button type="button" onclick="setInvestMax()" class="py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-colors text-center">MAX</button>
             </div>
           </div>
 
-          <!-- Status Lock Notice -->
-          <div class="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start space-x-2 text-[11px] text-amber-200/90">
-            <span class="text-amber-400 text-sm mt-0.5">🔒</span>
-            <p class="leading-relaxed">
-              <strong>Aturan Full Lock-Up 100 Hari:</strong> Seluruh modal di Kunci Dana dan profit harian 1% <strong>TIDAK BISA ditarik harian</strong>. Profit harian dikumpulkan dan dikunci bersama modal utama selama 100 hari. Total Modal + Profit baru bisa ditarik (WD) sekaligus saat timer 100 hari habis (Jatuh Tempo).
-            </p>
-          </div>
-        </div>
-
-        <!-- 3. SIMULATOR PROFIT HARIAN 1% (INTERAKTIF & REAL-TIME TEST) -->
-        <div class="glass-card neon-glow p-4 relative overflow-hidden border border-emerald-500/30">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center space-x-2">
-              <span class="text-base">⚡</span>
-              <h3 class="text-sm sm:text-base font-extrabold text-white">Simulator Profit Harian (1%/Hari)</h3>
+          <!-- Ringkasan Singkat Estimasi -->
+          <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5 space-y-1.5 font-mono text-xs mb-3.5">
+            <div class="flex justify-between text-gray-400">
+              <span>Modal Investasi:</span>
+              <span id="previewInvestModal" class="text-white font-bold">$100.00</span>
             </div>
-            <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">AUTO CREDIT 24 JAM</span>
-          </div>
-
-          <p class="text-xs text-gray-300 leading-relaxed">
-            Setiap 24 jam sekali, sistem menghitung <strong class="text-emerald-400">1.0%</strong> dari total Kunci Dana (<strong id="simLockedAmountRef" class="font-mono text-amber-400">$2,500.00</strong> = <strong id="simDailyYieldRef" class="text-emerald-400 font-mono">+$25.00 USDT/hari</strong>) dan otomatis mengumpulkannya ke <strong class="text-emerald-400">Komisi Profit</strong> (<span class="text-amber-400 font-medium">Terkunci & Cair di Hari ke-100</span>).
-          </p>
-
-          <div class="my-3 bg-[#0A0B0E] p-3 rounded-xl border border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs">
-            <div class="flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span class="text-gray-400">Siklus Payout 24 Jam Berikutnya:</span>
+            <div class="flex justify-between text-gray-400">
+              <span>Estimasi Profit / Hari (1%):</span>
+              <span id="previewInvestDaily" class="text-emerald-400 font-bold">+$1.00 / hari</span>
             </div>
-            <span id="dailyPayoutCountdown" class="font-mono text-emerald-400 font-bold text-sm">14:28:45</span>
+            <div class="flex justify-between text-gray-400">
+              <span>Total Estimasi Profit (100 Hari):</span>
+              <span id="previewInvestProfit" class="text-emerald-400 font-bold">+$100.00</span>
+            </div>
+            <div class="flex justify-between pt-1.5 border-t border-white/10 font-bold">
+              <span class="text-gray-300">Total Estimasi Hasil:</span>
+              <span id="previewInvestTotal" class="text-cyan-400 font-extrabold">$200.00</span>
+            </div>
           </div>
 
-          <!-- Interactive Test Button -->
-          <button type="button" onclick="simulateDailyProfitPayout()" id="btnSimulateDailyProfit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500/20 via-emerald-500/30 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/40 border border-emerald-500/40 text-emerald-300 hover:text-white font-bold text-xs flex items-center justify-center space-x-2 transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/10">
-            <span>⚡</span>
-            <span>Simulasikan 1 Hari Profit (<span id="simBtnYieldVal" class="font-mono text-white font-extrabold">+1% / +$25.00 USDT Terkunci</span>)</span>
+          <!-- Main CTA Button -->
+          <button type="button" onclick="handleConfirmInvest()" class="w-full py-3.5 btn-primary text-black font-extrabold text-sm shadow-xl shadow-emerald-500/25 flex items-center justify-center space-x-2 active:scale-[0.98] transition-all">
+            <span>Mulai Investasi Sekarang</span>
           </button>
-          <p class="text-[10px] text-center text-gray-500 mt-1.5">*Klik tombol di atas untuk menguji coba penambahan profit harian 1% ke Komisi Profit (Terkunci bersama modal hingga jatuh tempo).</p>
         </div>
 
-        <!-- 4. FORM MULAI INVESTASI BARU (KUNCI DANA 100 HARI) -->
-        <div class="glass-card neon-glow p-4 relative overflow-hidden border border-emerald-500/40">
-          <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
-            <div>
-              <h3 class="text-sm sm:text-base font-extrabold text-white">Mulai Investasi Sekarang</h3>
-              <p class="text-[10px] text-gray-400">Pindahkan Saldo Deposit ke Kunci Dana 100 Hari</p>
+        <!-- 4. ACCORDION / COLLAPSIBLE WIDGET: SIMULATOR PROFIT HARIAN -->
+        <div class="rounded-xl border border-white/10 bg-[#0E0F14] overflow-hidden">
+          <button type="button" onclick="toggleSimulatorCollapse()" class="w-full p-3.5 flex items-center justify-between text-left hover:bg-white/5 transition-colors">
+            <div class="flex items-center space-x-2">
+              <span class="text-amber-400 text-sm">⚡</span>
+              <span class="text-xs font-bold text-gray-200">Simulator Profit Harian (1.0%)</span>
             </div>
-            <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">MIN. $10 USD</span>
-          </div>
-
-          <div class="space-y-3">
-            <!-- Balance Availability Header -->
-            <div class="flex items-center justify-between text-xs bg-[#090A0E] p-2.5 rounded-xl border border-white/5">
-              <span class="text-gray-400">Saldo Deposit Tersedia:</span>
-              <div class="flex items-center space-x-1.5">
-                <strong id="investAvailableDeposit" class="text-white font-mono text-sm font-bold user-balance-val">$5,000.00 USD</strong>
-                <button type="button" onclick="openDepositModal()" class="text-[10px] text-emerald-400 font-semibold hover:underline">+ Top Up</button>
-              </div>
+            <div class="flex items-center space-x-2">
+              <span id="dailyPayoutCountdown" class="text-[11px] font-mono font-semibold text-emerald-400">24:00:00</span>
+              <svg id="simulatorChevron" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
             </div>
-
-            <!-- Input Amount -->
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1.5">Nominal Investasi ($ USD):</label>
-              <div class="relative flex items-center">
-                <span class="absolute left-3 text-gray-400 font-mono font-bold text-sm">$</span>
-                <input type="number" id="investInputAmount" value="500" min="10" step="10" placeholder="Masukkan jumlah USD" oninput="calculateInvestPreview()" class="w-full pl-8 pr-16 py-2.5 rounded-xl bg-[#090A0E] border border-white/15 text-white font-mono text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30">
-                <span class="absolute right-3 text-xs text-gray-400 font-bold">USD</span>
-              </div>
-            </div>
-
-            <!-- Quick Preset Chips -->
-            <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs">
-              <button type="button" onclick="setInvestPreset(100)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[11px] font-mono hover:text-white transition-colors">+$100</button>
-              <button type="button" onclick="setInvestPreset(500)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[11px] font-mono hover:text-white transition-colors">+$500</button>
-              <button type="button" onclick="setInvestPreset(1000)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[11px] font-mono hover:text-white transition-colors">+$1,000</button>
-              <button type="button" onclick="setInvestPreset(2500)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[11px] font-mono hover:text-white transition-colors">+$2,500</button>
-              <button type="button" onclick="setInvestMax()" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold transition-colors">MAX</button>
-            </div>
-
-            <!-- Dynamic Live Calculation Breakdown Box -->
-            <div class="bg-[#090A0E] p-3 rounded-xl border border-white/5 space-y-1.5 font-mono text-xs">
-              <div class="flex justify-between text-gray-400">
-                <span>Modal Terkunci (100 Hari):</span>
-                <span id="previewInvestModal" class="text-white font-bold">$500.00 USD</span>
-              </div>
-              <div class="flex justify-between text-gray-400">
-                <span>Estimasi Profit Harian (1%):</span>
-                <span id="previewInvestDaily" class="text-emerald-400 font-bold">+$5.00 USD / hari</span>
-              </div>
-              <div class="flex justify-between text-gray-400">
-                <span>Total Net Profit (100 Hari):</span>
-                <span id="previewInvestProfit" class="text-emerald-400 font-bold">+$500.00 USD</span>
-              </div>
-              <div class="flex justify-between pt-1.5 border-t border-white/10 font-bold">
-                <span class="text-gray-300">Total Pengembalian Kontrak:</span>
-                <span id="previewInvestTotal" class="text-cyan-400 font-extrabold">$1,000.00 USD</span>
-              </div>
-            </div>
-
-            <!-- Main CTA Button -->
-            <button type="button" onclick="handleConfirmInvest()" class="w-full py-3.5 btn-primary text-black font-extrabold text-sm shadow-xl shadow-emerald-500/25 flex items-center justify-center space-x-2 active:scale-[0.98] transition-all">
-              <span>🔒</span>
-              <span>Mulai Investasi Sekarang (Kunci 100 Hari)</span>
+          </button>
+          <div id="simulatorCollapseContent" class="hidden p-3.5 pt-0 space-y-2.5 border-t border-white/5">
+            <p class="text-[11px] text-gray-400 leading-relaxed pt-2">
+              Simulasi pertambahan profit 1% harian dari total dana investasi (<strong id="simLockedAmountRef" class="font-mono text-amber-400">$0.00</strong> = <strong id="simDailyYieldRef" class="text-emerald-400 font-mono">+$0.00 / hari</strong>).
+            </p>
+            <button type="button" onclick="simulateDailyProfitPayout()" id="btnSimulateDailyProfit" class="w-full py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 hover:text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-all active:scale-[0.98]">
+              <span>⚡ Simulasikan 1 Hari Profit (<span id="simBtnYieldVal" class="font-mono text-white">+1%</span>)</span>
             </button>
           </div>
         </div>
 
-        <!-- 5. DAFTAR PAKET INVESTASI SAYA (ACCORDION / DETAIL CARDS) -->
+        <!-- 5. DAFTAR PAKET INVESTASI SAYA -->
         <div class="glass-card p-4">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Daftar Paket Investasi Saya</h3>
-            <span id="packageCountText" class="text-[11px] text-gray-400 font-mono">1 Paket Aktif</span>
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Daftar Paket Investasi</h3>
+            <span id="packageCountText" class="text-[11px] text-gray-400 font-mono">0 Paket Aktif</span>
           </div>
 
-          <div id="activePackagesContainer" class="space-y-2.5">
+          <div id="activePackagesContainer" class="space-y-2">
             <!-- Injected dynamically via JS -->
           </div>
         </div>
@@ -804,339 +704,300 @@
       <!-- ============================================== -->
       <!-- VIEW 3: LTP TRADING MARKET                      -->
       <!-- ============================================== -->
-      <section id="view-trade" class="tab-view hidden space-y-4">
+      <section id="view-trade" class="tab-view hidden space-y-2.5">
         
-        <!-- HEADER & ASSET SELECTOR CHIPS -->
-        <div class="rounded-2xl bg-[#121318] border border-white/10 p-3.5 sm:p-4 shadow-xl">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 mb-3">
+        <!-- COMPACT HEADER & ASSET SELECTOR -->
+        <div class="rounded-xl bg-[#121318] border border-white/10 p-2.5 sm:p-3 shadow-lg">
+          <div class="flex items-center justify-between gap-2 mb-2">
             <div class="flex items-center space-x-2">
-              <div class="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-xs">
-                ⚡
-              </div>
-              <div>
-                <h2 class="text-sm sm:text-base font-extrabold text-white tracking-wide" data-i18n="trade_title">LTP Trading Platform</h2>
-                <div class="flex items-center space-x-1.5 text-[10px] text-gray-400">
-                  <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span class="text-emerald-400 font-semibold font-mono">LIVE MARKET FEED</span>
-                  <span class="text-gray-400">• Candlestick Real-Time</span>
-                </div>
-              </div>
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <h2 class="text-xs sm:text-sm font-extrabold text-white tracking-wide" data-i18n="trade_title">Trading Market</h2>
             </div>
 
-            <!-- Active User Deposit Balance Chip in Trade Header -->
-            <div class="flex items-center justify-between sm:justify-end space-x-2 bg-[#090A0E] px-3 py-1.5 rounded-xl border border-white/10">
-              <span class="text-[10px] text-gray-400" data-i18n="trade_balance_label">Saldo Deposit:</span>
-              <span id="tradeAvailableBalance" class="text-xs font-extrabold text-emerald-400 font-mono">$5,000.00 USD</span>
-              <button onclick="openDepositModal()" class="text-[10px] text-black font-bold bg-emerald-400 hover:bg-emerald-300 px-2 py-0.5 rounded-md transition-colors">+ Topup</button>
+            <!-- Active User Deposit Balance Chip -->
+            <div class="flex items-center space-x-1.5 bg-[#090A0E] px-2.5 py-1 rounded-lg border border-white/10 text-xs">
+              <span class="text-[10px] text-gray-400" data-i18n="trade_balance_label">Saldo:</span>
+              <span id="tradeAvailableBalance" class="font-extrabold text-emerald-400 font-mono text-xs user-balance-val">$0.00</span>
+              <button onclick="openDepositModal()" class="text-[10px] text-black font-bold bg-emerald-400 hover:bg-emerald-300 px-1.5 py-0.5 rounded transition-colors">+ Topup</button>
             </div>
           </div>
 
           <!-- ASSET SELECTOR PILLS -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <button onclick="selectTradeAsset('BTC/USDT')" id="asset-btn-BTC/USDT" class="asset-tab-btn flex items-center justify-between p-2.5 rounded-xl bg-emerald-500/15 border-2 border-emerald-500 text-white font-bold transition-all">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-amber-400 font-mono font-extrabold">₿</span>
-                <span class="text-xs">BTC/USDT</span>
+          <div class="grid grid-cols-4 gap-1.5 text-xs">
+            <button onclick="selectTradeAsset('BTC/USDT')" id="asset-btn-BTC/USDT" class="asset-tab-btn flex items-center justify-between px-2 py-1.5 rounded-lg bg-emerald-500/15 border-2 border-emerald-500 text-white font-bold transition-all">
+              <div class="flex items-center space-x-1">
+                <span class="text-amber-400 font-mono font-extrabold text-[11px]">₿</span>
+                <span class="text-[11px] font-bold">BTC</span>
               </div>
-              <span class="text-[10px] text-emerald-400 font-mono bg-emerald-500/20 px-1.5 py-0.5 rounded">88%</span>
+              <span class="text-[9px] text-emerald-400 font-mono font-bold bg-emerald-500/20 px-1 rounded">88%</span>
             </button>
 
-            <button onclick="selectTradeAsset('ETH/USDT')" id="asset-btn-ETH/USDT" class="asset-tab-btn flex items-center justify-between p-2.5 rounded-xl bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-indigo-400 font-mono font-extrabold">Ξ</span>
-                <span class="text-xs">ETH/USDT</span>
+            <button onclick="selectTradeAsset('ETH/USDT')" id="asset-btn-ETH/USDT" class="asset-tab-btn flex items-center justify-between px-2 py-1.5 rounded-lg bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
+              <div class="flex items-center space-x-1">
+                <span class="text-indigo-400 font-mono font-extrabold text-[11px]">Ξ</span>
+                <span class="text-[11px]">ETH</span>
               </div>
-              <span class="text-[10px] text-gray-400 font-mono bg-white/5 px-1.5 py-0.5 rounded">85%</span>
+              <span class="text-[9px] text-gray-400 font-mono bg-white/5 px-1 rounded">85%</span>
             </button>
 
-            <button onclick="selectTradeAsset('LTP/USDT')" id="asset-btn-LTP/USDT" class="asset-tab-btn flex items-center justify-between p-2.5 rounded-xl bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-emerald-400 font-mono font-extrabold">♦</span>
-                <span class="text-xs">LTP/USDT</span>
+            <button onclick="selectTradeAsset('LTP/USDT')" id="asset-btn-LTP/USDT" class="asset-tab-btn flex items-center justify-between px-2 py-1.5 rounded-lg bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
+              <div class="flex items-center space-x-1">
+                <span class="text-emerald-400 font-mono font-extrabold text-[11px]">♦</span>
+                <span class="text-[11px]">LTP</span>
               </div>
-              <span class="text-[10px] text-emerald-400 font-mono bg-emerald-500/20 px-1.5 py-0.5 rounded">92%</span>
+              <span class="text-[9px] text-emerald-400 font-mono bg-emerald-500/20 px-1 rounded">92%</span>
             </button>
 
-            <button onclick="selectTradeAsset('EUR/USD')" id="asset-btn-EUR/USD" class="asset-tab-btn flex items-center justify-between p-2.5 rounded-xl bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-blue-400 font-mono font-extrabold">€</span>
-                <span class="text-xs">EUR/USD</span>
+            <button onclick="selectTradeAsset('EUR/USD')" id="asset-btn-EUR/USD" class="asset-tab-btn flex items-center justify-between px-2 py-1.5 rounded-lg bg-[#1A1A22] border border-white/5 hover:border-white/20 text-gray-300 font-medium transition-all">
+              <div class="flex items-center space-x-1">
+                <span class="text-blue-400 font-mono font-extrabold text-[11px]">€</span>
+                <span class="text-[11px]">EUR</span>
               </div>
-              <span class="text-[10px] text-gray-400 font-mono bg-white/5 px-1.5 py-0.5 rounded">82%</span>
+              <span class="text-[9px] text-gray-400 font-mono bg-white/5 px-1 rounded">82%</span>
             </button>
           </div>
         </div>
 
-        <!-- MAIN CHART CARD -->
-        <div class="rounded-2xl bg-[#0B0C10] border border-white/10 p-3.5 sm:p-4 relative shadow-2xl overflow-hidden">
-          <!-- Ambient Chart Glow -->
-          <div class="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
+        <!-- INTEGRATED CANDLESTICK CHART & ORDER EXECUTION DECK -->
+        <div class="rounded-xl bg-[#0B0C10] border border-white/10 p-2.5 sm:p-3 relative shadow-xl overflow-hidden space-y-2.5">
           <!-- Market Summary Bar -->
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-white/10 relative z-10">
-            <div class="flex items-baseline space-x-2 sm:space-x-3">
-              <div class="flex items-center space-x-1.5">
-                <span id="tradeAssetSymbol" class="text-sm sm:text-base font-extrabold text-white">BTC/USDT</span>
-                <span class="text-[10px] text-gray-400 uppercase tracking-widest font-mono">Spot Real-Time</span>
-              </div>
+          <div class="flex items-center justify-between gap-1.5 pb-2 border-b border-white/10 relative z-10">
+            <div class="flex items-center space-x-2">
+              <span id="tradeAssetSymbol" class="text-xs sm:text-sm font-extrabold text-white font-mono">BTC/USDT</span>
               <!-- Current Price Indicator Badge -->
-              <div id="tradePriceBadge" class="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono font-extrabold text-base sm:text-lg transition-all duration-300">
+              <div id="tradePriceBadge" class="flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono font-extrabold text-xs sm:text-sm transition-all duration-300">
                 <span id="tradePriceArrow">▲</span>
                 <span id="tradeCurrentPrice">$64,820.50</span>
               </div>
             </div>
 
             <!-- Stats: 24h High/Low & Change -->
-            <div class="flex items-center space-x-3 text-[11px] font-mono">
-              <div class="hidden sm:block text-gray-400">
-                <span>24h H: </span><strong id="tradeHighPrice" class="text-white">$65,120.00</strong>
-              </div>
-              <div class="hidden sm:block text-gray-400">
-                <span>24h L: </span><strong id="tradeLowPrice" class="text-white">$63,940.20</strong>
-              </div>
-              <div class="flex items-center space-x-1 px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold" id="trade24hChange">
+            <div class="flex items-center space-x-2 text-[10px] font-mono">
+              <span class="hidden sm:inline text-gray-400">H: <strong id="tradeHighPrice" class="text-white">$65,120.00</strong></span>
+              <span class="hidden sm:inline text-gray-400">L: <strong id="tradeLowPrice" class="text-white">$63,940.20</strong></span>
+              <div class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold" id="trade24hChange">
                 +2.45%
               </div>
             </div>
           </div>
 
+          <!-- COMPACT TECHNICAL ANALYSIS TOOLBAR -->
+          <div class="flex items-center justify-between gap-1.5 px-1.5 py-1 rounded-lg bg-[#090A0E] border border-white/5 text-[10px] font-mono select-none">
+            <!-- Left: Timeframe Selector -->
+            <div class="flex items-center space-x-1">
+              <span class="text-gray-500 text-[9px] mr-0.5 font-sans hidden xs:inline">TF:</span>
+              <button onclick="setChartTimeframe('1m')" id="tf-btn-1m" class="tf-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40 transition-all text-[10px]">1m</button>
+              <button onclick="setChartTimeframe('5m')" id="tf-btn-5m" class="tf-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent transition-all text-[10px]">5m</button>
+              <button onclick="setChartTimeframe('15m')" id="tf-btn-15m" class="tf-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent transition-all text-[10px]">15m</button>
+              <button onclick="setChartTimeframe('1h')" id="tf-btn-1h" class="tf-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent transition-all text-[10px]">1h</button>
+            </div>
+
+            <!-- Right: Chart Type & Technical Indicator Toggles -->
+            <div class="flex items-center space-x-1">
+              <!-- Chart Type Switcher -->
+              <div class="flex items-center bg-[#15161C] p-0.5 rounded border border-white/10">
+                <button onclick="setChartType('candles')" id="chart-type-candles" class="chart-type-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px] flex items-center space-x-1 transition-all" title="Candlestick Chart">
+                  <span>🕯️</span>
+                  <span class="hidden sm:inline">Candles</span>
+                </button>
+                <button onclick="setChartType('line')" id="chart-type-line" class="chart-type-btn px-1.5 py-0.5 rounded text-gray-400 hover:text-white text-[9px] flex items-center space-x-1 transition-all" title="Line Chart">
+                  <span>📈</span>
+                  <span class="hidden sm:inline">Line</span>
+                </button>
+              </div>
+
+              <div class="h-3 w-px bg-white/10 mx-0.5"></div>
+
+              <!-- Indicator Toggles -->
+              <button onclick="toggleIndicator('ma')" id="ind-btn-ma" class="ind-btn px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 text-[9px] transition-all" title="Moving Average Overlay">
+                MA(7)
+              </button>
+              <button onclick="toggleIndicator('rsi')" id="ind-btn-rsi" class="ind-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent text-[9px] transition-all" title="RSI Oscillator">
+                RSI(14)
+              </button>
+            </div>
+          </div>
+
           <!-- LIVE CANVAS CHART VIEWPORT -->
-          <div id="chartContainer" class="w-full h-64 sm:h-72 relative bg-gradient-to-b from-[#090A0F] to-[#0D0F16] rounded-xl overflow-hidden border border-white/5">
+          <div id="chartContainer" class="w-full h-48 sm:h-56 relative bg-gradient-to-b from-[#090A0F] to-[#0D0F16] rounded-lg overflow-hidden border border-white/5">
             <canvas id="binaryChartCanvas" class="w-full h-full block"></canvas>
             
+            <!-- Live Indicator Legend Tags Overlay (Top Left) -->
+            <div id="chartIndicatorsOverlay" class="absolute top-2 left-2 flex flex-wrap items-center gap-1.5 text-[9px] font-mono pointer-events-none z-10">
+              <span id="maLegendDisplay" class="text-amber-300 font-bold bg-black/70 px-1.5 py-0.5 rounded border border-amber-500/30 shadow">
+                MA(7): <strong class="text-amber-400">$...</strong>
+              </span>
+              <span id="rsiLegendDisplay" class="hidden text-purple-300 font-bold bg-black/70 px-1.5 py-0.5 rounded border border-purple-500/30 shadow">
+                RSI(14): <strong class="text-purple-400">...</strong>
+              </span>
+            </div>
+
             <!-- Live Price Cursor Overlay Pill -->
-            <div id="chartPricePill" class="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-500 text-black font-mono font-extrabold text-[10px] px-2 py-0.5 rounded shadow-lg pointer-events-none transition-all duration-200">
+            <div id="chartPricePill" class="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-500 text-black font-mono font-extrabold text-[9px] px-1.5 py-0.5 rounded shadow pointer-events-none transition-all duration-200">
               $64,820.50
             </div>
 
             <!-- Live Market Ping Watermark -->
-            <div class="absolute bottom-2 left-2 pointer-events-none flex items-center space-x-1.5 opacity-60 text-[10px] font-mono text-gray-400">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>MARKET ACTIVE</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACTIVE RUNNING TRADE STATUS BANNER (Dynamic when trade is active) -->
-        <div id="activeTradeBanner" class="hidden rounded-2xl bg-gradient-to-r from-emerald-950/80 via-[#101918] to-emerald-950/80 border-2 border-emerald-500 p-4 shadow-2xl transition-all duration-300 animate-pulse-subtle">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <div class="flex items-center space-x-2">
-                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400" data-i18n="trade_active_label">Trade Berlangsung</span>
-                <span id="activeTradeDirectionBadge" class="px-2 py-0.5 rounded font-bold font-mono text-xs bg-emerald-500 text-black">
-                  CALL / HIGHER ▲
-                </span>
-              </div>
-              <div class="flex items-center space-x-3 text-xs mt-1.5 font-mono">
-                <span class="text-gray-300">Strike: <strong id="activeTradeStrikePrice" class="text-white">$64,820.50</strong></span>
-                <span class="text-gray-300">Live: <strong id="activeTradeLivePrice" class="text-emerald-400">$64,835.20</strong></span>
-                <span class="text-gray-300">Invest: <strong id="activeTradeInvestAmt" class="text-white">$100.00</strong></span>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between sm:justify-end space-x-4">
-              <!-- Live PnL Status -->
-              <div class="text-right">
-                <span class="text-[10px] text-gray-400 block uppercase">Status Terkini</span>
-                <span id="activeTradePnlBadge" class="text-xs font-extrabold font-mono text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40">
-                  IN THE MONEY (WIN)
-                </span>
-              </div>
-
-              <!-- Animated Large Countdown Clock -->
-              <div class="flex items-center space-x-2 bg-black/60 px-3 py-1.5 rounded-xl border border-emerald-500/40">
-                <span class="text-sm">⏱️</span>
-                <span id="activeTradeCountdown" class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-300 tracking-wider">
-                  00:59
-                </span>
-              </div>
+            <div class="absolute bottom-1.5 left-2 pointer-events-none flex items-center space-x-1 opacity-50 text-[9px] font-mono text-gray-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="chartTimeframeWatermark">TF: 1m LIVE</span>
             </div>
           </div>
 
-          <!-- Progress Bar for countdown -->
-          <div class="w-full bg-white/10 h-1.5 rounded-full mt-3 overflow-hidden">
-            <div id="activeTradeProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-300 h-full rounded-full transition-all duration-1000" style="width: 100%;"></div>
-          </div>
-        </div>
-
-        <!-- BINARY EXECUTION CONTROL PANEL -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
-          
-          <!-- LEFT / TOP: PARAMETER CONFIGURATION (7 Cols on desktop) -->
-          <div class="md:col-span-7 rounded-2xl bg-[#121318] border border-white/10 p-4 shadow-xl space-y-3.5">
+          <!-- INTEGRATED ORDER CONFIGURATION & EXECUTION CONTROLS -->
+          <div class="pt-0.5 space-y-2">
             
-            <!-- 1. NOMINAL INVESTASI ($ USD) -->
-            <div>
-              <div class="flex justify-between items-center text-xs mb-1.5">
-                <label for="binaryInvestAmount" class="font-bold text-gray-300 flex items-center space-x-1.5" data-i18n="trade_invest_label">
-                  <span>Nominal Investasi ($ USD)</span>
-                </label>
-                <span class="text-[11px] text-gray-400">Min. $5.00 • Saldo: <strong id="controlAvailableBal" class="text-emerald-400 font-mono">$5,000.00</strong></span>
+            <!-- ROW 1: DURATION SELECTOR & SALDO INFO -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center text-[10px]">
+                <label class="font-bold text-gray-400 uppercase tracking-wider" data-i18n="trade_duration_label">Durasi Trading</label>
+                <span class="text-gray-400">Saldo: <strong id="controlAvailableBal" class="text-emerald-400 font-mono font-bold user-balance-val">$0.00</strong></span>
+                <span id="expiryTargetTime" class="hidden">Target Durasi: 60s</span>
               </div>
+              <div class="grid grid-cols-4 gap-1.5">
+                <button onclick="selectExpiryDuration(30)" id="dur-btn-30" class="duration-btn py-1.5 rounded-lg bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all text-center">
+                  30s
+                </button>
+                <button onclick="selectExpiryDuration(60)" id="dur-btn-60" class="duration-btn py-1.5 rounded-lg bg-emerald-500/20 border-2 border-emerald-500 text-xs font-bold text-emerald-400 transition-all text-center">
+                  1m
+                </button>
+                <button onclick="selectExpiryDuration(180)" id="dur-btn-180" class="duration-btn py-1.5 rounded-lg bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all text-center">
+                  3m
+                </button>
+                <button onclick="selectExpiryDuration(300)" id="dur-btn-300" class="duration-btn py-1.5 rounded-lg bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all text-center">
+                  5m
+                </button>
+              </div>
+            </div>
 
-              <div class="flex items-center space-x-2">
-                <button onclick="stepInvestAmount(-10)" class="w-10 h-11 rounded-xl bg-[#1A1A22] hover:bg-[#242430] border border-white/10 text-white font-bold text-lg active:scale-95 transition-all flex items-center justify-center">
+            <!-- ROW 2: NOMINAL TRADE INPUT & QUICK PRESETS -->
+            <div class="space-y-1.5">
+              <div class="flex items-center space-x-1.5">
+                <button onclick="stepInvestAmount(-10)" class="w-9 h-9 rounded-lg bg-[#1A1A22] hover:bg-[#242430] border border-white/10 text-white font-bold text-base active:scale-95 transition-all flex items-center justify-center">
                   -
                 </button>
                 <div class="relative flex-1">
-                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-mono font-bold text-base">$</span>
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-mono font-bold text-xs">$</span>
                   <input 
                     type="number" 
                     id="binaryInvestAmount" 
-                    oninput="recalculateBinaryPayout()" 
+                    oninput="updateInvestPresetHighlights(parseFloat(this.value)||0); recalculateBinaryPayout();" 
                     value="100" 
                     min="5" 
                     step="5" 
-                    class="w-full pl-8 pr-3 py-2.5 rounded-xl bg-[#090A0E] border border-white/15 text-white font-mono font-extrabold text-lg focus:outline-none focus:border-emerald-400 transition-all"
+                    class="w-full pl-6 pr-2 py-1.5 rounded-lg bg-[#090A0E] border border-white/15 text-white font-mono font-extrabold text-sm focus:outline-none focus:border-emerald-400 transition-all"
                   />
                 </div>
-                <button onclick="stepInvestAmount(10)" class="w-10 h-11 rounded-xl bg-[#1A1A22] hover:bg-[#242430] border border-white/10 text-white font-bold text-lg active:scale-95 transition-all flex items-center justify-center">
+                <button onclick="stepInvestAmount(10)" class="w-9 h-9 rounded-lg bg-[#1A1A22] hover:bg-[#242430] border border-white/10 text-white font-bold text-base active:scale-95 transition-all flex items-center justify-center">
                   +
                 </button>
               </div>
 
               <!-- Quick Presets -->
-              <div class="grid grid-cols-6 gap-1.5 mt-2">
-                <button onclick="setInvestPreset(10)" class="py-1 rounded-lg bg-[#181920] hover:bg-white/10 border border-white/5 text-[11px] font-mono font-bold text-gray-300 transition-colors">$10</button>
-                <button onclick="setInvestPreset(50)" class="py-1 rounded-lg bg-[#181920] hover:bg-white/10 border border-white/5 text-[11px] font-mono font-bold text-gray-300 transition-colors">$50</button>
-                <button onclick="setInvestPreset(100)" class="py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-[11px] font-mono font-bold text-emerald-400 transition-colors">$100</button>
-                <button onclick="setInvestPreset(250)" class="py-1 rounded-lg bg-[#181920] hover:bg-white/10 border border-white/5 text-[11px] font-mono font-bold text-gray-300 transition-colors">$250</button>
-                <button onclick="setInvestPreset(500)" class="py-1 rounded-lg bg-[#181920] hover:bg-white/10 border border-white/5 text-[11px] font-mono font-bold text-gray-300 transition-colors">$500</button>
-                <button onclick="setInvestMax()" class="py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-[11px] font-mono font-bold text-amber-400 transition-colors">MAX</button>
+              <div class="grid grid-cols-6 gap-1" id="investPresetContainer">
+                <button onclick="setInvestPreset(10)" id="preset-btn-10" class="invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-white/10 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all">$10</button>
+                <button onclick="setInvestPreset(50)" id="preset-btn-50" class="invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-white/10 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all">$50</button>
+                <button onclick="setInvestPreset(100)" id="preset-btn-100" class="invest-preset-btn py-1 rounded-md bg-emerald-500/20 border border-emerald-500/50 text-[10px] font-mono font-bold text-emerald-400 transition-all">$100</button>
+                <button onclick="setInvestPreset(250)" id="preset-btn-250" class="invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-white/10 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all">$250</button>
+                <button onclick="setInvestPreset(500)" id="preset-btn-500" class="invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-white/10 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all">$500</button>
+                <button onclick="setInvestMax()" id="preset-btn-max" class="invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-amber-500/30 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all">MAX</button>
               </div>
             </div>
 
-            <!-- 2. PILIHAN DURASI TRADING -->
-            <div>
-              <div class="flex justify-between items-center text-xs mb-1.5">
-                <label class="font-bold text-gray-300" data-i18n="trade_duration_label">Durasi Trading</label>
-                <span id="expiryTargetTime" class="text-[10px] font-mono text-gray-400">Target Durasi: 60s</span>
+            <!-- ROW 3: COMPACT ESTIMASI LABA & PAYOUT -->
+            <div class="flex items-center justify-between text-[11px] bg-[#090A0E] px-2.5 py-1.5 rounded-lg border border-white/5 font-mono">
+              <div class="flex items-center space-x-1">
+                <span class="text-gray-400">Payout:</span>
+                <span id="payoutRateDisplay" class="font-extrabold text-emerald-400">88%</span>
               </div>
-              <div class="grid grid-cols-4 gap-2">
-                <button onclick="selectExpiryDuration(30)" id="dur-btn-30" class="duration-btn py-2 px-2 rounded-xl bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all flex flex-col items-center">
-                  <span>30s</span>
-                  <span class="text-[9px] text-gray-400 font-normal">Cepat</span>
-                </button>
-                <button onclick="selectExpiryDuration(60)" id="dur-btn-60" class="duration-btn py-2 px-2 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 text-xs font-bold text-emerald-400 transition-all flex flex-col items-center">
-                  <span>1m</span>
-                  <span class="text-[9px] text-emerald-400/80 font-normal">Populer</span>
-                </button>
-                <button onclick="selectExpiryDuration(180)" id="dur-btn-180" class="duration-btn py-2 px-2 rounded-xl bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all flex flex-col items-center">
-                  <span>3m</span>
-                  <span class="text-[9px] text-gray-400 font-normal">Standar</span>
-                </button>
-                <button onclick="selectExpiryDuration(300)" id="dur-btn-300" class="duration-btn py-2 px-2 rounded-xl bg-[#1A1A22] border border-white/10 hover:border-white/20 text-xs font-bold text-gray-300 transition-all flex flex-col items-center">
-                  <span>5m</span>
-                  <span class="text-[9px] text-gray-400 font-normal">Stabil</span>
-                </button>
+              <div class="flex items-center space-x-1">
+                <span class="text-gray-400">Profit:</span>
+                <span id="payoutProfitDisplay" class="font-bold text-emerald-400">+$88.00</span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <span class="text-gray-400">Total:</span>
+                <span id="payoutTotalReturnDisplay" class="font-extrabold text-white">$188.00</span>
               </div>
             </div>
 
-          </div>
-
-          <!-- RIGHT / BOTTOM: PAYOUT CARD & EXECUTION BUTTONS (5 Cols on desktop) -->
-          <div class="md:col-span-5 rounded-2xl bg-[#121318] border border-white/10 p-4 shadow-xl flex flex-col justify-between space-y-3">
-            
-            <!-- PAYOUT & PROFIT BREAKDOWN CARD -->
-            <div class="bg-[#090A0E] rounded-xl p-3 border border-white/10 space-y-2 text-xs">
-              <div class="flex justify-between items-center">
-                <span class="text-gray-400" data-i18n="trade_payout_label">Persentase Payout</span>
-                <span id="payoutRateDisplay" class="font-extrabold font-mono text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/30">88%</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-400">Estimasi Laba Bersih:</span>
-                <span id="payoutProfitDisplay" class="font-extrabold font-mono text-emerald-400">+$88.00 USD</span>
-              </div>
-              <div class="pt-2 border-t border-white/10 flex justify-between items-center text-xs">
-                <span class="font-bold text-white">Total Pengembalian:</span>
-                <span id="payoutTotalReturnDisplay" class="font-mono font-extrabold text-white text-sm">$188.00 USD</span>
-              </div>
-            </div>
-
-            <!-- TOMBOL UTAMA EKSEKUSI (BUY / SELL) -->
-            <div class="grid grid-cols-2 gap-2.5 pt-1">
-              
-              <!-- 1. HIGHER / CALL / BUY BUTTON -->
+            <!-- ROW 4: TOMBOL EKSEKUSI UTAMA (HIGHER / LOWER) TEPAT MENEMPEL DI BAWAH CHART -->
+            <div class="grid grid-cols-2 gap-2 pt-0.5">
+              <!-- HIGHER / CALL / BUY BUTTON -->
               <button 
                 id="btnTradeCall" 
                 onclick="executeBinaryTrade('CALL')" 
-                class="group flex flex-col items-center justify-center p-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-black font-extrabold shadow-xl shadow-emerald-500/25 transition-all disabled:opacity-50 disabled:pointer-events-none"
+                class="group flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-black font-extrabold shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-40 disabled:pointer-events-none"
               >
-                <div class="flex items-center space-x-1.5 mb-0.5">
-                  <!-- SINGLE ARROW UP ICON -->
-                  <svg class="w-5 h-5 stroke-[3] group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center space-x-1 mb-0.5">
+                  <svg class="w-4 h-4 stroke-[3] group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7"/>
                   </svg>
-                  <span class="text-sm tracking-wide" data-i18n="btn_call">HIGHER</span>
+                  <span class="text-sm font-black tracking-wide" data-i18n="btn_call">HIGHER</span>
                 </div>
-                <span class="text-[10px] font-bold opacity-90">CALL (▲ +88%)</span>
+                <span class="text-[9px] font-bold opacity-90">CALL (▲ +88%)</span>
               </button>
 
-              <!-- 2. LOWER / PUT / SELL BUTTON -->
+              <!-- LOWER / PUT / SELL BUTTON -->
               <button 
                 id="btnTradePut" 
                 onclick="executeBinaryTrade('PUT')" 
-                class="group flex flex-col items-center justify-center p-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-[0.98] text-white font-extrabold shadow-xl shadow-rose-600/25 transition-all disabled:opacity-50 disabled:pointer-events-none"
+                class="group flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-[0.98] text-white font-extrabold shadow-lg shadow-rose-600/20 transition-all disabled:opacity-40 disabled:pointer-events-none"
               >
-                <div class="flex items-center space-x-1.5 mb-0.5">
-                  <!-- SINGLE ARROW DOWN ICON -->
-                  <svg class="w-5 h-5 stroke-[3] group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center space-x-1 mb-0.5">
+                  <svg class="w-4 h-4 stroke-[3] group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12l7 7 7-7"/>
                   </svg>
-                  <span class="text-sm tracking-wide" data-i18n="btn_put">LOWER</span>
+                  <span class="text-sm font-black tracking-wide" data-i18n="btn_put">LOWER</span>
                 </div>
-                <span class="text-[10px] font-bold opacity-90">PUT (▼ +88%)</span>
+                <span class="text-[9px] font-bold opacity-90">PUT (▼ +88%)</span>
               </button>
-
             </div>
 
           </div>
-
         </div>
 
         <!-- RECENT TRADES HISTORY TABLE -->
-        <div class="rounded-2xl bg-[#121318] border border-white/10 p-3.5 sm:p-4 shadow-xl">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center space-x-2" data-i18n="trade_history_title">
+        <div class="rounded-xl bg-[#121318] border border-white/10 p-2.5 sm:p-3 shadow-lg">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center space-x-1.5" data-i18n="trade_history_title">
               <span>📊 Riwayat Transaksi Trading</span>
             </h3>
-            <span class="text-[10px] text-gray-500 font-mono">Real-Time Ledger</span>
+            <span class="text-[9px] text-gray-500 font-mono">Real-Time Ledger</span>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs font-mono">
               <thead>
                 <tr class="text-[10px] uppercase text-gray-500 border-b border-white/5">
-                  <th class="pb-2">Waktu</th>
-                  <th class="pb-2">Aset</th>
-                  <th class="pb-2">Posisi</th>
-                  <th class="pb-2">Strike / Close</th>
-                  <th class="pb-2 text-right">Hasil (PnL)</th>
+                  <th class="pb-1.5">Waktu</th>
+                  <th class="pb-1.5">Aset</th>
+                  <th class="pb-1.5">Posisi</th>
+                  <th class="pb-1.5">Strike / Close</th>
+                  <th class="pb-1.5 text-right">Hasil (PnL)</th>
                 </tr>
               </thead>
               <tbody id="binaryTradeHistoryTable" class="divide-y divide-white/5">
                 <!-- Initial dummy trade records -->
                 <tr class="text-gray-300">
-                  <td class="py-2.5 text-[11px] text-gray-400">10:42:15</td>
-                  <td class="py-2.5 font-bold text-white">BTC/USDT</td>
-                  <td class="py-2.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">CALL ▲</span></td>
-                  <td class="py-2.5 text-[11px] text-gray-300">64,810.00 → 64,825.40</td>
-                  <td class="py-2.5 text-right font-extrabold text-emerald-400">+$88.00 USD</td>
+                  <td class="py-2 text-[10px] text-gray-400">10:42:15</td>
+                  <td class="py-2 font-bold text-white text-xs">BTC/USDT</td>
+                  <td class="py-2"><span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">CALL ▲</span></td>
+                  <td class="py-2 text-[10px] text-gray-300">64,810.00 → 64,825.40</td>
+                  <td class="py-2 text-right font-extrabold text-emerald-400 text-xs">+$88.00</td>
                 </tr>
                 <tr class="text-gray-300">
-                  <td class="py-2.5 text-[11px] text-gray-400">10:35:00</td>
-                  <td class="py-2.5 font-bold text-white">ETH/USDT</td>
-                  <td class="py-2.5"><span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold text-[10px]">PUT ▼</span></td>
-                  <td class="py-2.5 text-[11px] text-gray-300">3,455.10 → 3,448.20</td>
-                  <td class="py-2.5 text-right font-extrabold text-emerald-400">+$85.00 USD</td>
+                  <td class="py-2 text-[10px] text-gray-400">10:35:00</td>
+                  <td class="py-2 font-bold text-white text-xs">ETH/USDT</td>
+                  <td class="py-2"><span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold text-[9px]">PUT ▼</span></td>
+                  <td class="py-2 text-[10px] text-gray-300">3,455.10 → 3,448.20</td>
+                  <td class="py-2 text-right font-extrabold text-emerald-400 text-xs">+$85.00</td>
                 </tr>
                 <tr class="text-gray-300">
-                  <td class="py-2.5 text-[11px] text-gray-400">10:20:18</td>
-                  <td class="py-2.5 font-bold text-white">BTC/USDT</td>
-                  <td class="py-2.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">CALL ▲</span></td>
-                  <td class="py-2.5 text-[11px] text-gray-300">64,790.00 → 64,782.10</td>
-                  <td class="py-2.5 text-right font-extrabold text-rose-400">-$50.00 USD</td>
+                  <td class="py-2 text-[10px] text-gray-400">10:20:18</td>
+                  <td class="py-2 font-bold text-white text-xs">LTP/USDT</td>
+                  <td class="py-2"><span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">CALL ▲</span></td>
+                  <td class="py-2 text-[10px] text-gray-300">128.40 → 129.10</td>
+                  <td class="py-2 text-right font-extrabold text-emerald-400 text-xs">+$92.00</td>
                 </tr>
               </tbody>
             </table>
@@ -1166,55 +1027,11 @@
 
         <!-- Transaction List -->
         <div id="txListContainer" class="space-y-2">
-          <!-- TX Item 1 -->
-          <div class="bg-[#141418] border border-white/5 rounded-xl p-3 flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
-                ↓
-              </div>
-              <div>
-                <p class="font-bold text-white">Daily Profit Yield</p>
-                <p class="text-[10px] text-gray-500">28 Aug 2026, 09:30 • #TX9824</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-mono font-bold text-emerald-400">+$24.50 USD</p>
-              <span class="text-[9px] text-emerald-400/80 uppercase font-semibold">Sukses</span>
-            </div>
-          </div>
-
-          <!-- TX Item 2 -->
-          <div class="bg-[#141418] border border-white/5 rounded-xl p-3 flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-3">
-              <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
-                +
-              </div>
-              <div>
-                <p class="font-bold text-white">Deposit USDT TRC20</p>
-                <p class="text-[10px] text-gray-500">27 Aug 2026, 14:15 • #TX9711</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-mono font-bold text-white">+$500.00 USD</p>
-              <span class="text-[9px] text-emerald-400/80 uppercase font-semibold">Selesai</span>
-            </div>
-          </div>
-
-          <!-- TX Item 3 -->
-          <div class="bg-[#141418] border border-white/5 rounded-xl p-3 flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-3">
-              <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
-                🔒
-              </div>
-              <div>
-                <p class="font-bold text-white">Lock Fund 100 Days</p>
-                <p class="text-[10px] text-gray-500">15 Jul 2026, 11:00 • #TX8402</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-mono font-bold text-amber-400">-$2,500.00 USD</p>
-              <span class="text-[9px] text-amber-400/80 uppercase font-semibold">Terkunci</span>
-            </div>
+          <div class="text-center py-10 bg-[#141418] border border-white/5 rounded-2xl p-6 text-gray-500">
+            <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-white/5 flex items-center justify-center text-xl">📄</div>
+            <p class="font-bold text-white text-xs">Belum Ada Riwayat Transaksi</p>
+            <p class="text-[11px] text-gray-400 mt-1 max-w-sm mx-auto">Saldo awal akun Live Anda adalah $0.00 USD. Seluruh mutasi deposit, trading, dan profit akan tercatat rapi di sini.</p>
+            <button onclick="openDepositModal()" class="mt-3 px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">+ Deposit Pertama</button>
           </div>
         </div>
       </section>
@@ -1245,7 +1062,19 @@
 
         <!-- Settings Groups -->
         <div class="rounded-xl bg-[#141418] border border-white/5 divide-y divide-white/5 text-xs">
-          <!-- 1. Language Toggle in Settings -->
+          <!-- 1. Account Mode (Live / Demo Simulation) -->
+          <div class="p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleDemoAccountMode()">
+            <div class="flex items-center space-x-3">
+              <span class="text-lg">🔄</span>
+              <div>
+                <p class="font-bold text-white">Mode Akun (Live / Demo)</p>
+                <p class="text-[10px] text-gray-400" id="settingsModeSub">Akun Live (Murni $0.00 USD) • Klik untuk beralih</p>
+              </div>
+            </div>
+            <span class="font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded text-xs" id="settingsModeBadge">Live ($0.00)</span>
+          </div>
+
+          <!-- 2. Language Toggle in Settings -->
           <div class="p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleLanguage()">
             <div class="flex items-center space-x-3">
               <span class="text-lg">🌐</span>
@@ -1378,36 +1207,19 @@
       <div class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
       <!-- Logo & Brand Header -->
-      <div class="text-center mb-4 sm:mb-5">
-        <div class="inline-flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-emerald-400 p-[1.5px] shadow-lg shadow-emerald-500/20 mb-2">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-emerald-400 p-[1.5px] shadow-lg shadow-emerald-500/20 mb-2.5">
           <div class="w-full h-full bg-[#0D0F14] rounded-[10px] flex items-center justify-center">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <svg class="w-6 h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
         </div>
         <h2 class="text-base sm:text-lg font-bold text-[#F3F4F6] tracking-wide">Long Term Partner</h2>
-        <p class="text-[11px] text-gray-400 mt-0.5">Platform Investasi & Portofolio Finansial Terpercaya</p>
-      </div>
-
-      <!-- SEGMENTED AUTH TABS (Masuk vs Daftar) -->
-      <div class="grid grid-cols-2 p-1 bg-[#090A0E] border border-white/10 rounded-xl mb-4 text-xs font-bold">
-        <button type="button" id="tabBtnLogin" onclick="switchAuthTab('login')" class="py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 bg-emerald-400 text-black shadow-md shadow-emerald-500/20 font-extrabold">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-          </svg>
-          <span data-i18n="auth_tab_login">Masuk (Login)</span>
-        </button>
-        <button type="button" id="tabBtnRegister" onclick="switchAuthTab('register')" class="py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white font-semibold">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-          </svg>
-          <span data-i18n="auth_tab_register">Daftar Akun</span>
-        </button>
       </div>
 
       <!-- Error Alert Message -->
-      <div id="authErrorMsg" class="hidden mb-3.5 p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-xs flex items-center space-x-2">
+      <div id="authErrorMsg" class="hidden mb-4 p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-400 text-xs flex items-center space-x-2">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
@@ -1415,22 +1227,22 @@
       </div>
 
       <!-- 1. FORM LOGIN -->
-      <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3.5">
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
         <!-- Username Field -->
         <div>
-          <label for="loginUserId" class="block text-xs font-semibold text-gray-200 mb-1" data-i18n="label_userid">Username / Email</label>
+          <label for="loginUserId" class="block text-xs font-semibold text-gray-200 mb-1.5" data-i18n="label_userid">Username / Email</label>
           <div class="relative flex items-center">
-            <input type="text" id="loginUserId" required placeholder="admin2026 atau email" autocomplete="username" class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0E]/90 border border-white/15 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30 transition-all">
+            <input type="text" id="loginUserId" required placeholder="Username atau Email" autocomplete="username" class="w-full px-3.5 py-2.5 rounded-xl bg-[#090A0E]/90 border border-white/15 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30 transition-all">
           </div>
         </div>
 
         <!-- Password Field -->
         <div>
-          <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center justify-between mb-1.5">
             <label for="loginPassword" class="block text-xs font-semibold text-gray-200" data-i18n="label_password">Password</label>
           </div>
           <div class="relative flex items-center">
-            <input type="password" id="loginPassword" required placeholder="password" autocomplete="current-password" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-[#090A0E]/90 border border-white/15 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30 transition-all">
+            <input type="password" id="loginPassword" required placeholder="Password" autocomplete="current-password" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-[#090A0E]/90 border border-white/15 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30 transition-all">
             <button type="button" id="togglePasswordBtn" onclick="toggleFieldVisibility('loginPassword', 'togglePasswordBtn')" class="absolute right-2.5 p-1.5 text-gray-400 hover:text-emerald-400 focus:outline-none transition-colors" title="Lihat/Sembunyikan Password" aria-label="Toggle Password visibility">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>
@@ -1439,11 +1251,11 @@
           </div>
         </div>
 
-        <button type="submit" id="loginSubmitBtn" class="w-full py-3 btn-primary text-black font-extrabold text-xs sm:text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center space-x-2 active:scale-[0.98] mt-1.5">
+        <button type="submit" id="loginSubmitBtn" class="w-full py-3 btn-primary text-black font-extrabold text-xs sm:text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center space-x-2 active:scale-[0.98] mt-2">
           <span data-i18n="btn_login_submit">Masuk ke Dashboard</span>
         </button>
 
-        <div class="pt-2 text-center">
+        <div class="pt-2.5 text-center">
           <p class="text-xs text-gray-400">
             Belum punya akun? 
             <button type="button" onclick="switchAuthTab('register')" class="text-emerald-400 font-bold hover:underline ml-1">Daftar Sekarang</button>
@@ -1519,12 +1331,6 @@
           </p>
         </div>
       </form>
-
-      <div class="mt-4 text-center px-2">
-        <p class="text-[11px] text-gray-400 italic font-medium leading-relaxed" data-i18n="login_quote">
-          "Investasi terbaik adalah kesabaran dan konsistensi jangka panjang."
-        </p>
-      </div>
     </div>
   </div>
 
@@ -1560,6 +1366,21 @@
         </div>
 
         <div>
+          <label class="text-gray-400 block mb-1">Nominal Deposit ($ USD)</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3 text-gray-400 font-mono font-bold text-sm">$</span>
+            <input type="number" id="depositInputAmount" value="100" min="10" step="10" placeholder="Min. $10.00" class="w-full pl-8 pr-14 py-2 rounded-lg bg-[#0E0E12] border border-white/10 text-white font-mono text-xs outline-none focus:border-emerald-500">
+            <span class="absolute right-3 text-xs text-gray-400 font-bold">USD</span>
+          </div>
+          <div class="flex items-center space-x-1.5 mt-1.5 overflow-x-auto pb-1 text-xs">
+            <button type="button" onclick="document.getElementById('depositInputAmount').value = 50;" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[10px] font-mono">+$50</button>
+            <button type="button" onclick="document.getElementById('depositInputAmount').value = 100;" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[10px] font-mono">+$100</button>
+            <button type="button" onclick="document.getElementById('depositInputAmount').value = 500;" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[10px] font-mono">+$500</button>
+            <button type="button" onclick="document.getElementById('depositInputAmount').value = 1000;" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-[10px] font-mono">+$1,000</button>
+          </div>
+        </div>
+
+        <div>
           <label class="text-gray-400 block mb-1">Alamat Dompet Resmi LTP</label>
           <div class="flex items-center space-x-1.5">
             <input type="text" readonly value="TLTP8924x912389KLasdf001289123" class="w-full p-2 rounded-lg bg-[#0E0E12] border border-white/10 text-gray-300 font-mono text-[11px]">
@@ -1567,11 +1388,11 @@
           </div>
         </div>
 
-        <p class="text-[10px] text-gray-400">Deposit otomatis diproses dalam 1-3 konfirmasi jaringan blockchain.</p>
+        <p class="text-[10px] text-gray-400">Deposit otomatis diverifikasi dan langsung masuk ke Saldo Deposit Anda.</p>
       </div>
 
-      <button onclick="closeDepositModal(); showToast('Permintaan deposit telah dicatat!', 'success');" class="mt-4 w-full py-2.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400">
-        Saya Sudah Transfer
+      <button onclick="handleDepositSubmit()" class="mt-4 w-full py-2.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 active:scale-95 transition-all shadow-lg shadow-emerald-500/20">
+        Konfirmasi & Tambah Saldo Deposit
       </button>
     </div>
   </div>
@@ -1597,26 +1418,26 @@
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
               <span>Saldo Deposit Bebas (Siap WD):</span>
             </span>
-            <strong id="modalWdDepositBal" class="text-xs font-bold text-emerald-400">$5,000.00 USD</strong>
+            <strong id="modalWdDepositBal" class="text-xs font-bold text-emerald-400">$0.00 USD</strong>
           </div>
           <div class="flex justify-between items-center text-amber-400/90 pt-1 border-t border-white/5 text-[10px]">
             <span>🔒 Komisi Profit (100 Hari):</span>
-            <span id="modalWdProfitBal" class="font-bold text-amber-400">$1,820.50 (Cair Hari 100)</span>
+            <span id="modalWdProfitBal" class="font-bold text-amber-400">$0.00 (Cair Hari 100)</span>
           </div>
           <div class="flex justify-between items-center text-amber-400/90 text-[10px]">
             <span>🔒 Kunci Dana (100 Hari):</span>
-            <span id="modalWdLockedBal" class="font-bold text-amber-400">$2,500.00 (Cair Hari 100)</span>
+            <span id="modalWdLockedBal" class="font-bold text-amber-400">$0.00 (Cair Hari 100)</span>
           </div>
           <div class="flex justify-between items-center text-white font-bold pt-1.5 border-t border-emerald-500/30 text-xs">
             <span>Total Saldo Bebas Bisa Ditarik:</span>
-            <span id="modalWdAvailableTotal" class="font-extrabold text-emerald-400 font-mono">$5,000.00 USD</span>
+            <span id="modalWdAvailableTotal" class="font-extrabold text-emerald-400 font-mono">$0.00 USD</span>
           </div>
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="text-gray-400 block">Jumlah Penarikan (USD)</label>
-            <button type="button" onclick="setWithdrawMax()" class="text-[10px] text-emerald-400 font-bold hover:underline">Tarik Saldo Bebas ($<span id="wdMaxHelper">5,000.00</span>)</button>
+            <button type="button" onclick="setWithdrawMax()" class="text-[10px] text-emerald-400 font-bold hover:underline">Tarik Saldo Bebas ($<span id="wdMaxHelper">0.00</span>)</button>
           </div>
           <input type="number" id="withdrawAmount" placeholder="Min. $20.00" class="w-full p-2.5 rounded-lg bg-[#0E0E12] border border-white/10 text-white font-mono outline-none focus:border-emerald-500">
         </div>
@@ -1780,11 +1601,11 @@
         view_all: "Lihat Detail",
         status_total: "TOTAL",
         status_active: "AKTIF",
-        status_locked: "TERKUNCI",
+        status_locked: "INVESTASI",
         card_total_bal: "Total Saldo Saat Ini",
-        card_deposit_bal: "Saldo Deposit",
+        card_deposit_bal: "Saldo Tersedia",
         card_profit_com: "Komisi Profit",
-        card_locked_100: "Kunci Dana 100 Hari",
+        card_locked_100: "Investasi",
         section_features: "Jelajahi Fitur",
         ecosystem_badge: "Ekosistem LTP",
         feat_invest: "Investasi",
@@ -1845,11 +1666,11 @@
         view_all: "View Details",
         status_total: "TOTAL",
         status_active: "ACTIVE",
-        status_locked: "LOCKED",
+        status_locked: "INVESTMENT",
         card_total_bal: "Current Total Balance",
-        card_deposit_bal: "Deposit Balance",
+        card_deposit_bal: "Available Balance",
         card_profit_com: "Profit Commission",
-        card_locked_100: "100-Day Locked Fund",
+        card_locked_100: "Investment",
         section_features: "Explore Features",
         ecosystem_badge: "LTP Ecosystem",
         feat_invest: "Investment",
@@ -1947,12 +1768,10 @@
     const VALID_USER_ID = "admin2026";
     const VALID_PASSWORD = "12345678";
 
-    // Switch between Login and Register tabs
+    // Switch between Login and Register views
     function switchAuthTab(mode) {
       const loginForm = document.getElementById('loginForm');
       const registerForm = document.getElementById('registerForm');
-      const tabBtnLogin = document.getElementById('tabBtnLogin');
-      const tabBtnRegister = document.getElementById('tabBtnRegister');
       const errorDiv = document.getElementById('authErrorMsg');
 
       if (errorDiv) errorDiv.classList.add('hidden');
@@ -1960,23 +1779,9 @@
       if (mode === 'register') {
         if (loginForm) loginForm.classList.add('hidden');
         if (registerForm) registerForm.classList.remove('hidden');
-
-        if (tabBtnRegister) {
-          tabBtnRegister.className = 'py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 bg-emerald-400 text-black shadow-md shadow-emerald-500/20 font-extrabold';
-        }
-        if (tabBtnLogin) {
-          tabBtnLogin.className = 'py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white font-semibold';
-        }
       } else {
         if (registerForm) registerForm.classList.add('hidden');
         if (loginForm) loginForm.classList.remove('hidden');
-
-        if (tabBtnLogin) {
-          tabBtnLogin.className = 'py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 bg-emerald-400 text-black shadow-md shadow-emerald-500/20 font-extrabold';
-        }
-        if (tabBtnRegister) {
-          tabBtnRegister.className = 'py-2 rounded-lg transition-all text-center flex items-center justify-center space-x-1.5 text-gray-400 hover:text-white font-semibold';
-        }
       }
     }
 
@@ -2009,6 +1814,258 @@
       }
     }
 
+    // Global Reactive User State (Single Source of Truth)
+    let userWallet = {
+      deposit: 0.00,
+      profit: 0.00,
+      locked: 0.00
+    };
+    let activeInvestmentPackages = [];
+    let userTransactions = [];
+    let currentTxFilter = 'all';
+
+    function getTotalBalance() {
+      return (userWallet.deposit || 0) + (userWallet.profit || 0) + (userWallet.locked || 0);
+    }
+
+    // Master Demo Template Data (Simulasi $9,320.50 USD)
+    const MASTER_DEMO_TEMPLATE = {
+      fullName: "Admin LTP Master",
+      username: "admin2026",
+      contact: "admin@ltp.com",
+      uid: "LTP-8924018",
+      isDemo: true,
+      wallet: {
+        deposit: 5000.00,
+        profit: 1820.50,
+        locked: 2500.00
+      },
+      investmentPackages: [
+        {
+          id: "LTP-VAULT-001",
+          name: "LTP 100-Day Yield Vault #1",
+          amount: 2500.00,
+          dailyRate: 0.01,
+          durationDays: 100,
+          daysElapsed: 38,
+          startDate: new Date(Date.now() - 38 * 24 * 60 * 60 * 1000).toISOString(),
+          targetMaturityTimestamp: Date.now() + (62 * 24 * 60 * 60 * 1000)
+        }
+      ],
+      transactions: [
+        {
+          id: "TX9824",
+          type: "profit",
+          title: "Daily Profit Yield",
+          amount: "+$24.50 USD",
+          status: "Sukses",
+          badgeClass: "bg-emerald-500/15 text-emerald-400",
+          icon: "↓",
+          timeStr: "09:30",
+          dateStr: "28 Agu 2026",
+          timestamp: Date.now() - 3600000
+        },
+        {
+          id: "TX9711",
+          type: "deposit",
+          title: "Deposit USDT TRC20",
+          amount: "+$500.00 USD",
+          status: "Selesai",
+          badgeClass: "bg-blue-500/15 text-blue-400",
+          icon: "+",
+          timeStr: "14:15",
+          dateStr: "27 Agu 2026",
+          timestamp: Date.now() - 86400000
+        },
+        {
+          id: "TX8402",
+          type: "invest",
+          title: "Lock Fund 100 Days",
+          amount: "-$2,500.00 USD",
+          status: "Terkunci",
+          badgeClass: "bg-amber-500/15 text-amber-400",
+          icon: "🔒",
+          timeStr: "11:00",
+          dateStr: "15 Jul 2026",
+          timestamp: Date.now() - (38 * 86400000)
+        }
+      ]
+    };
+
+    // Record a new transaction into state and UI
+    function recordTransaction(tx) {
+      if (!tx) return;
+      userTransactions.unshift(tx);
+      renderTransactionsUI(currentTxFilter);
+      renderHomeRecentActivity();
+    }
+
+    // Render Recent Activity snippet on Home Dashboard
+    function renderHomeRecentActivity() {
+      const container = document.getElementById('homeRecentActivityList');
+      if (!container) return;
+
+      if (!userTransactions || userTransactions.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5 text-gray-500 text-xs">
+            <span class="block font-medium">Belum ada mutasi transaksi.</span>
+            <span class="text-[10px] text-gray-600">Saldo awal akun Live Anda adalah $0.00 USD.</span>
+          </div>
+        `;
+        return;
+      }
+
+      const recent = userTransactions.slice(0, 3);
+      container.innerHTML = recent.map(tx => {
+        let isPos = tx.amount && (tx.amount.startsWith('+') || tx.type === 'deposit' || tx.type === 'profit');
+        let amtColor = isPos ? 'text-emerald-400' : 'text-rose-400';
+        let badgeClass = tx.badgeClass || (isPos ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400');
+        let iconBg = isPos ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400';
+        return `
+          <div class="bg-[#0E1015] border border-white/5 rounded-xl p-2.5 flex items-center justify-between text-xs hover:border-emerald-500/30 transition-all">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-7 h-7 rounded-lg ${iconBg} flex items-center justify-center font-bold text-xs">
+                ${tx.icon || (isPos ? '↓' : '↑')}
+              </div>
+              <div class="min-w-0 pr-1">
+                <p class="font-bold text-white text-[11px] truncate max-w-[140px] sm:max-w-[180px]">${tx.title || 'Transaksi'}</p>
+                <p class="text-[9px] text-gray-500">${tx.dateStr || 'Hari ini'}, ${tx.timeStr || ''}</p>
+              </div>
+            </div>
+            <div class="text-right whitespace-nowrap">
+              <p class="font-mono font-bold text-xs ${amtColor}">${tx.amount}</p>
+              <span class="text-[8px] px-1.5 py-0.2 rounded font-semibold uppercase ${badgeClass}">
+                ${tx.status || 'Sukses'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Transactions in History/Reports Tab
+    function renderTransactionsUI(filter = 'all') {
+      currentTxFilter = filter;
+      renderHomeRecentActivity();
+      const container = document.getElementById('txListContainer');
+      if (!container) return;
+
+      const filteredList = filter === 'all' 
+        ? userTransactions 
+        : userTransactions.filter(t => t.type === filter);
+
+      if (!filteredList || filteredList.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 bg-[#141418] border border-white/5 rounded-2xl p-6 text-gray-500">
+            <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-white/5 flex items-center justify-center text-xl">📄</div>
+            <p class="font-bold text-white text-xs">Belum Ada Riwayat Transaksi</p>
+            <p class="text-[11px] text-gray-400 mt-1 max-w-sm mx-auto">
+              Saldo awal akun Live Anda adalah $0.00 USD. Seluruh mutasi deposit, trading, dan profit akan tercatat rapi di sini.
+            </p>
+            <button onclick="openDepositModal()" class="mt-3 px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+              + Deposit Pertama
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredList.map(tx => {
+        let isPos = tx.amount && (tx.amount.startsWith('+') || tx.type === 'deposit' || tx.type === 'profit');
+        let amtColor = isPos ? 'text-emerald-400' : 'text-rose-400';
+        let badgeClass = tx.badgeClass || (isPos ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400');
+        let iconBg = isPos ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400';
+        
+        return `
+          <div class="bg-[#141418] border border-white/5 rounded-xl p-3 flex items-center justify-between text-xs hover:border-emerald-500/30 transition-all animate-fadeIn">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center font-bold text-sm">
+                ${tx.icon || (isPos ? '↓' : '↑')}
+              </div>
+              <div>
+                <p class="font-bold text-white">${tx.title || 'Transaksi'}</p>
+                <p class="text-[10px] text-gray-500">${tx.dateStr || 'Hari ini'}, ${tx.timeStr || ''} • #${tx.id || 'TX'}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-mono font-bold ${amtColor}">
+                ${tx.amount}
+              </p>
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold uppercase ${badgeClass}">
+                ${tx.status || 'Sukses'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Portfolio Accumulation Graph: Flat line for new $0.00 accounts, dynamic curve for active accounts
+    function renderPortfolioGraph() {
+      const graphLine = document.getElementById('graphLine');
+      const graphArea = document.getElementById('graphArea');
+      const graphDot = document.getElementById('graphDot');
+      const graphDotPing = document.getElementById('graphDotPing');
+      const trendText = document.getElementById('portfolioTrendText');
+      const trendArrow = document.getElementById('portfolioTrendArrow');
+      const growthBadge = document.getElementById('heroGrowthBadge');
+
+      const total = getTotalBalance();
+      const hasBalanceOrHistory = total > 0 || userTransactions.length > 0;
+
+      if (!hasBalanceOrHistory) {
+        // Pure $0.00 New Live Account -> Pristine Flat Line
+        if (graphLine) {
+          graphLine.setAttribute('d', 'M 0,65 L 400,65');
+          graphLine.setAttribute('stroke', '#374151');
+        }
+        if (graphArea) {
+          graphArea.setAttribute('d', 'M 0,65 L 400,65 L 400,65 L 0,65 Z');
+        }
+        if (graphDot) {
+          graphDot.setAttribute('cx', '400');
+          graphDot.setAttribute('cy', '65');
+          graphDot.setAttribute('fill', '#6B7280');
+        }
+        if (graphDotPing) {
+          graphDotPing.classList.add('opacity-0');
+          graphDotPing.classList.remove('animate-ping');
+        }
+        if (trendText) trendText.innerText = 'Akun Baru (Garis Datar / $0.00)';
+        if (trendArrow) {
+          trendArrow.innerText = '—';
+          trendArrow.className = 'text-xs text-gray-500';
+        }
+        if (growthBadge) growthBadge.innerText = '0.00%';
+      } else {
+        // Active Account (Demo or Funded Live Account) -> Upward Growth Curve
+        if (graphLine) {
+          graphLine.setAttribute('d', 'M 0,70 Q 100,62 180,48 T 290,32 T 400,14');
+          graphLine.setAttribute('stroke', '#10B981');
+        }
+        if (graphArea) {
+          graphArea.setAttribute('d', 'M 0,70 Q 100,62 180,48 T 290,32 T 400,14 L 400,80 L 0,80 Z');
+        }
+        if (graphDot) {
+          graphDot.setAttribute('cx', '400');
+          graphDot.setAttribute('cy', '14');
+          graphDot.setAttribute('fill', '#10B981');
+        }
+        if (graphDotPing) {
+          graphDotPing.setAttribute('cx', '400');
+          graphDotPing.setAttribute('cy', '14');
+          graphDotPing.classList.remove('opacity-0');
+          graphDotPing.classList.add('animate-ping');
+        }
+        if (trendText) trendText.innerText = '+28.4% Pertumbuhan Portofolio';
+        if (trendArrow) {
+          trendArrow.innerText = '▲';
+          trendArrow.className = 'text-xs text-emerald-400';
+        }
+        if (growthBadge) growthBadge.innerText = '+28.40%';
+      }
+    }
+
     // Helper: Update Header & Settings with Active User Profile
     function applyUserProfileToUI(user) {
       if (!user) return;
@@ -2034,6 +2091,157 @@
         
         const uidSpan = settingsCard.querySelector('.font-mono.text-gray-300');
         if (uidSpan && user.uid) uidSpan.innerText = user.uid;
+      }
+
+      // Update Mode indicator badges
+      updateAccountModeUI(user.isDemo);
+    }
+
+    // Update Account Mode badge in Header and Settings
+    function updateAccountModeUI(isDemo) {
+      const modeText = document.getElementById('accountModeText');
+      const modeBadge = document.getElementById('accountModeBadge');
+      const modeInd = document.getElementById('accountModeIndicator');
+      const setModeBadge = document.getElementById('settingsModeBadge');
+      const setModeSub = document.getElementById('settingsModeSub');
+
+      if (isDemo) {
+        if (modeText) modeText.innerText = 'Demo';
+        if (modeBadge) {
+          modeBadge.className = 'flex items-center space-x-1 px-2 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-[10px] font-bold text-amber-400 hover:bg-amber-500/25 transition-all active:scale-95';
+        }
+        if (modeInd) modeInd.className = 'w-1.5 h-1.5 rounded-full bg-amber-400';
+        if (setModeBadge) {
+          setModeBadge.innerText = 'Demo ($9,320.50)';
+          setModeBadge.className = 'font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded text-xs';
+        }
+        if (setModeSub) setModeSub.innerText = 'Mode Simulasi Demo ($9,320.50 USD) • Klik untuk switch ke Live ($0.00)';
+      } else {
+        if (modeText) modeText.innerText = 'Live';
+        if (modeBadge) {
+          modeBadge.className = 'flex items-center space-x-1 px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-bold text-emerald-400 hover:bg-emerald-500/20 transition-all active:scale-95';
+        }
+        if (modeInd) modeInd.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
+        if (setModeBadge) {
+          setModeBadge.innerText = 'Live ($0.00)';
+          setModeBadge.className = 'font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded text-xs';
+        }
+        if (setModeSub) setModeSub.innerText = 'Akun Live (Murni $0.00 USD) • Klik untuk switch ke Demo';
+      }
+    }
+
+    // Toggle Demo / Live Account Mode with clean state isolation
+    function toggleDemoAccountMode() {
+      let currentUser = null;
+      try {
+        currentUser = JSON.parse(localStorage.getItem('ltp_current_user') || 'null');
+      } catch (e) {
+        currentUser = null;
+      }
+
+      if (!currentUser) {
+        showToast('Silakan login atau daftar akun terlebih dahulu.', 'info');
+        return;
+      }
+
+      // Preserve current active in-memory data before switching
+      if (currentUser.isDemo) {
+        currentUser.demoWallet = { ...userWallet };
+        currentUser.demoInvestmentPackages = [ ...activeInvestmentPackages ];
+        currentUser.demoTransactions = [ ...userTransactions ];
+      } else {
+        currentUser.liveWallet = { ...userWallet };
+        currentUser.liveInvestmentPackages = [ ...activeInvestmentPackages ];
+        currentUser.liveTransactions = [ ...userTransactions ];
+      }
+
+      const willBeDemo = !currentUser.isDemo;
+      currentUser.isDemo = willBeDemo;
+
+      if (willBeDemo) {
+        // Switch to Demo
+        currentUser.wallet = currentUser.demoWallet || { deposit: 5000.00, profit: 1820.50, locked: 2500.00 };
+        currentUser.investmentPackages = currentUser.demoInvestmentPackages || [ ...MASTER_DEMO_TEMPLATE.investmentPackages ];
+        currentUser.transactions = currentUser.demoTransactions || [ ...MASTER_DEMO_TEMPLATE.transactions ];
+        saveActiveUserData(currentUser);
+        loadUserSessionData(currentUser);
+        playAudioEffect('click');
+        showToast('Beralih ke Akun Simulasi / Demo: Saldo $9,320.50 USD.', 'success');
+      } else {
+        // Switch to Live (Murni $0.00 untuk akun baru)
+        currentUser.wallet = currentUser.liveWallet || { deposit: 0.00, profit: 0.00, locked: 0.00 };
+        currentUser.investmentPackages = currentUser.liveInvestmentPackages || [];
+        currentUser.transactions = currentUser.liveTransactions || [];
+        saveActiveUserData(currentUser);
+        loadUserSessionData(currentUser);
+        playAudioEffect('click');
+        showToast('Beralih ke Akun Live: Saldo murni $0.00 USD.', 'info');
+      }
+    }
+
+    // Load active session into in-memory variables and sync UI
+    function loadUserSessionData(user) {
+      if (!user) return;
+
+      // Initialize wallet with pure $0.00 USD defaults if not set
+      if (user.wallet) {
+        userWallet.deposit = typeof user.wallet.deposit === 'number' ? user.wallet.deposit : 0.00;
+        userWallet.profit = typeof user.wallet.profit === 'number' ? user.wallet.profit : 0.00;
+        userWallet.locked = typeof user.wallet.locked === 'number' ? user.wallet.locked : 0.00;
+      } else {
+        userWallet.deposit = 0.00;
+        userWallet.profit = 0.00;
+        userWallet.locked = 0.00;
+      }
+
+      // Initialize active investment packages
+      activeInvestmentPackages = Array.isArray(user.investmentPackages) ? [ ...user.investmentPackages ] : [];
+
+      // Initialize transactions
+      userTransactions = Array.isArray(user.transactions) ? [ ...user.transactions ] : [];
+
+      applyUserProfileToUI(user);
+      updateAllBalanceDisplays();
+      renderTransactionsUI(currentTxFilter);
+      renderPortfolioGraph();
+      renderInvestTabUI();
+    }
+
+    // Save active in-memory data to user profile in localStorage
+    function saveActiveUserData(overrideUser) {
+      try {
+        let current = overrideUser || JSON.parse(localStorage.getItem('ltp_current_user') || 'null');
+        if (!current) return;
+
+        current.wallet = {
+          deposit: userWallet.deposit,
+          profit: userWallet.profit,
+          locked: userWallet.locked
+        };
+        current.investmentPackages = [ ...activeInvestmentPackages ];
+        current.transactions = [ ...userTransactions ];
+
+        if (current.isDemo) {
+          current.demoWallet = { ...current.wallet };
+          current.demoInvestmentPackages = [ ...current.investmentPackages ];
+          current.demoTransactions = [ ...current.transactions ];
+        } else {
+          current.liveWallet = { ...current.wallet };
+          current.liveInvestmentPackages = [ ...current.investmentPackages ];
+          current.liveTransactions = [ ...current.transactions ];
+        }
+
+        localStorage.setItem('ltp_current_user', JSON.stringify(current));
+
+        // Update registered users list
+        const registeredUsers = JSON.parse(localStorage.getItem('ltp_registered_users') || '[]');
+        const idx = registeredUsers.findIndex(u => u.uid === current.uid || (u.username && u.username.toLowerCase() === current.username.toLowerCase()));
+        if (idx !== -1) {
+          registeredUsers[idx] = { ...registeredUsers[idx], ...current };
+          localStorage.setItem('ltp_registered_users', JSON.stringify(registeredUsers));
+        }
+      } catch (err) {
+        console.warn('Error saving active user data:', err);
       }
     }
 
@@ -2081,16 +2289,22 @@
           // Success Login
           if (errorDiv) errorDiv.classList.add('hidden');
           
-          const activeUser = matchedUser || {
-            fullName: "Admin LTP Master",
-            username: VALID_USER_ID,
-            contact: "admin@ltp.com",
-            uid: "LTP-8924018"
-          };
+          let activeUser = matchedUser;
+          if (isMaster && !activeUser) {
+            // Check if master already has saved live/demo state in storage
+            const savedCurrent = JSON.parse(localStorage.getItem('ltp_current_user') || 'null');
+            if (savedCurrent && savedCurrent.username === VALID_USER_ID) {
+              activeUser = savedCurrent;
+            } else {
+              activeUser = { ...MASTER_DEMO_TEMPLATE };
+            }
+          }
 
           sessionStorage.setItem('ltp_authenticated', 'true');
           localStorage.setItem('ltp_current_user', JSON.stringify(activeUser));
-          applyUserProfileToUI(activeUser);
+          
+          // Load User Session & Wallets
+          loadUserSessionData(activeUser);
 
           const authModal = document.getElementById('authModal');
           if (authModal) {
@@ -2171,6 +2385,7 @@
         const username = `${cleanName}${randSuffix}`;
         const uid = 'LTP-' + Math.floor(1000000 + Math.random() * 9000000);
 
+        // CREATE NEW LIVE USER: MURNI NOL ($0.00 USD)
         const newUser = {
           fullName,
           contact,
@@ -2178,6 +2393,14 @@
           uid,
           referral: referral || 'DIRECT',
           password: password,
+          isDemo: false,
+          wallet: {
+            deposit: 0.00,
+            profit: 0.00,
+            locked: 0.00
+          },
+          investmentPackages: [],
+          transactions: [],
           createdAt: new Date().toISOString()
         };
 
@@ -2194,8 +2417,8 @@
         sessionStorage.setItem('ltp_authenticated', 'true');
         localStorage.setItem('ltp_current_user', JSON.stringify(newUser));
 
-        // Update UI profile
-        applyUserProfileToUI(newUser);
+        // Load new user session: Sets all balances to pure $0.00 and flat graph
+        loadUserSessionData(newUser);
 
         // Close Auth Modal
         const authModal = document.getElementById('authModal');
@@ -2214,7 +2437,7 @@
         switchTab('tab-home');
         playAudioEffect('success');
 
-        showToast(`🎉 Pendaftaran Berhasil! Selamat datang, ${fullName}. Akun aktif.`, 'success');
+        showToast(`🎉 Pendaftaran Berhasil! Selamat datang, ${fullName}. Akun Live Anda aktif dengan saldo awal $0.00 USD.`, 'success');
       }, 750);
     }
 
@@ -2347,6 +2570,8 @@
       if (tabId === 'tab-invest') {
         viewId = 'view-invest';
         navId = 'nav-tab-invest';
+        renderInvestTabUI();
+        calculateInvestPreview();
       } else if (tabId === 'tab-trade') {
         viewId = 'view-trade';
         navId = 'nav-tab-trade';
@@ -2548,6 +2773,50 @@
       document.getElementById('depositModal').classList.add('hidden');
     }
 
+    function handleDepositSubmit() {
+      const amtInput = document.getElementById('depositInputAmount');
+      const amt = amtInput ? parseFloat(amtInput.value) || 0 : 0;
+
+      if (!amt || amt < 10) {
+        showToast('Minimal nominal deposit adalah $10.00 USD!', 'error');
+        playAudioEffect('error');
+        return;
+      }
+
+      // Add to deposit balance
+      userWallet.deposit += amt;
+
+      // Record transaction
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+      const newTx = {
+        id: 'TX' + Math.floor(1000 + Math.random() * 9000),
+        type: 'deposit',
+        title: 'Deposit Saldo USDT TRC20',
+        amount: `+$${amt.toFixed(2)} USD`,
+        status: 'Selesai',
+        badgeClass: 'bg-blue-500/15 text-blue-400',
+        icon: '+',
+        timeStr,
+        dateStr,
+        timestamp: Date.now()
+      };
+
+      recordTransaction(newTx);
+      saveActiveUserData();
+
+      closeDepositModal();
+      updateAllBalanceDisplays();
+      renderPortfolioGraph();
+      playAudioEffect('success');
+
+      showToast(`🎉 Deposit sebesar +$${amt.toFixed(2)} USD berhasil masuk ke Saldo Deposit!`, 'success');
+      if (amtInput) amtInput.value = '100';
+    }
+
     function openWithdrawModal() {
       history.pushState({ modal: 'withdraw', tab: currentActiveTab, type: 'modal' }, '', '#withdraw');
       document.getElementById('withdrawModal').classList.remove('hidden');
@@ -2591,9 +2860,31 @@
       // Potong dari Saldo Deposit Bebas
       userWallet.deposit -= amt;
 
+      // Record transaction
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+      const newTx = {
+        id: 'TX' + Math.floor(1000 + Math.random() * 9000),
+        type: 'withdraw',
+        title: 'Penarikan Dana / Withdrawal',
+        amount: `-$${amt.toFixed(2)} USD`,
+        status: 'Diproses',
+        badgeClass: 'bg-amber-500/15 text-amber-400',
+        icon: '↑',
+        timeStr,
+        dateStr,
+        timestamp: Date.now()
+      };
+
+      recordTransaction(newTx);
+      saveActiveUserData();
+
       closeWithdrawModal();
       updateAllBalanceDisplays();
-      renderInvestTabUI();
+      renderPortfolioGraph();
       playAudioEffect('success');
       showToast(`Permintaan penarikan $${amt.toFixed(2)} USD berhasil diajukan ke antrean blockchain!`, 'success');
       if (amtInput) amtInput.value = '';
@@ -2627,48 +2918,52 @@
       const lockedStr = '$' + userWallet.locked.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       if (type === 'total') {
-        openGenericModal(`Total Saldo Saat Ini (${totalStr} USD)`, `
+        openGenericModal(`Total Saldo Saat Ini (${totalStr})`, `
           <p>Total akumulasi seluruh portofolio aktif Anda di ekosistem LTP, mencakup alokasi modal deposit, hasil profit, dan kunci dana investasi.</p>
           <div class="bg-white/5 p-3 rounded-lg space-y-1.5 font-mono text-xs my-2">
-            <div class="flex justify-between"><span>Saldo Deposit (Bebas WD):</span><span class="text-white font-bold">${depStr}</span></div>
-            <div class="flex justify-between"><span>Komisi Profit (100 Hari):</span><span class="text-amber-400 font-bold">${profitStr} (Terkunci)</span></div>
-            <div class="flex justify-between"><span>Kunci Dana (100 Hari):</span><span class="text-amber-400 font-bold">${lockedStr} (Terkunci)</span></div>
-            <div class="flex justify-between border-t border-emerald-500/30 pt-1.5 font-bold"><span>Total Portofolio:</span><span class="text-emerald-400 font-bold">${totalStr} USD</span></div>
+            <div class="flex justify-between"><span>Saldo Tersedia (Bebas WD):</span><span class="text-white font-bold">${depStr}</span></div>
+            <div class="flex justify-between"><span>Komisi Profit:</span><span class="text-amber-400 font-bold">${profitStr}</span></div>
+            <div class="flex justify-between"><span>Investasi:</span><span class="text-amber-400 font-bold">${lockedStr}</span></div>
+            <div class="flex justify-between border-t border-emerald-500/30 pt-1.5 font-bold"><span>Total Portofolio:</span><span class="text-emerald-400 font-bold">${totalStr}</span></div>
           </div>
           <button onclick="closeGenericModal(); switchTab('tab-invest');" class="w-full mt-2 py-2 rounded-lg bg-emerald-500 text-black font-bold">Kelola Portofolio Investasi</button>
         `);
       } else if (type === 'deposit') {
-        openGenericModal(`Saldo Deposit (${depStr} USD)`, `
-          <p>Saldo deposit merupakan modal pokok bebas Anda yang siap digunakan untuk trading atau dialokasikan ke Kunci Dana 100 Hari.</p>
+        openGenericModal(`Saldo Tersedia (${depStr})`, `
+          <p>Saldo tersedia merupakan dana Anda yang siap digunakan untuk transaksi trading atau dialokasikan ke program investasi.</p>
           <div class="bg-white/5 p-3 rounded-lg space-y-1.5 font-mono text-xs my-2">
-            <div class="flex justify-between"><span>Status:</span><span class="text-emerald-400 font-bold">BEBAS DIGUNAKAN</span></div>
+            <div class="flex justify-between"><span>Status:</span><span class="text-emerald-400 font-bold">SIAP DIGUNAKAN</span></div>
             <div class="flex justify-between"><span>Tipe Aset:</span><span>USDT & USD Fiat</span></div>
-            <div class="flex justify-between"><span>Alokasi Investasi:</span><span class="text-emerald-400">Tersedia untuk Dikunci</span></div>
+            <div class="flex justify-between"><span>Alokasi Investasi:</span><span class="text-emerald-400">Tersedia untuk Transaksi</span></div>
           </div>
           <div class="grid grid-cols-2 gap-2 mt-2">
             <button onclick="closeGenericModal(); openDepositModal();" class="py-2 rounded-lg bg-emerald-500 text-black font-bold text-xs">+ Top Up</button>
-            <button onclick="closeGenericModal(); switchTab('tab-invest');" class="py-2 rounded-lg bg-white/10 text-white font-bold text-xs">🔒 Kunci Dana 100 Hari</button>
+            <button onclick="closeGenericModal(); switchTab('tab-invest');" class="py-2 rounded-lg bg-white/10 text-white font-bold text-xs">Investasi</button>
           </div>
         `);
       } else if (type === 'profit') {
-        openGenericModal(`Komisi Profit (${profitStr} USD)`, `
-          <p>Akumulasi profit dari hasil <strong>Profit Harian 1.0%</strong> dari Kunci Dana 100 Hari. Sesuai aturan <strong>Full Lock-Up 100 Hari</strong>, profit harian dikumpulkan dan <strong class="text-amber-400">DIKUNCI bersama modal utama selama 100 hari</strong>.</p>
+        openGenericModal(`Komisi Profit (${profitStr})`, `
+          <p>Akumulasi profit dari hasil <strong>Profit Harian 1.0%</strong> dari portofolio investasi Anda.</p>
           <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-lg space-y-1.5 font-mono text-xs my-2">
-            <div class="flex justify-between"><span>Status:</span><span class="text-amber-400 font-bold">TERKUNCI (Cair di Hari ke-100)</span></div>
+            <div class="flex justify-between"><span>Status:</span><span class="text-amber-400 font-bold">TERKUMPUL</span></div>
             <div class="flex justify-between"><span>Akumulasi Harian:</span><span class="text-emerald-400 font-bold">+1.0% / 24 Jam</span></div>
-            <div class="flex justify-between"><span>Pencairan Total:</span><span class="text-white font-bold">Bersama Modal Pokok di Hari 100</span></div>
+            <div class="flex justify-between"><span>Pencairan Total:</span><span class="text-white font-bold">Bersama Modal Pokok saat Selesai Kontrak</span></div>
           </div>
-          <button onclick="closeGenericModal(); switchTab('tab-invest');" class="w-full mt-2 py-2.5 rounded-lg bg-amber-500 text-black font-bold">Lihat Portofolio Investasi 100 Hari</button>
+          <button onclick="closeGenericModal(); switchTab('tab-invest');" class="w-full mt-2 py-2.5 rounded-lg bg-amber-500 text-black font-bold">Lihat Portofolio Investasi</button>
         `);
       } else if (type === 'locked100') {
         const dailyYield = userWallet.locked * 0.01;
-        openGenericModal(`Kunci Dana 100 Hari (${lockedStr} USD)`, `
-          <p>Dana modal yang dikunci selama 100 hari di protokol Yield Vault LTP. Bersama <strong>Komisi Profit</strong>, seluruh modal dan profit harian <strong>TIDAK BISA ditarik</strong> sampai masa 100 hari selesai (Jatuh Tempo).</p>
+        const primaryDaysElapsed = activeInvestmentPackages.length > 0 ? (activeInvestmentPackages[0].daysElapsed || 0) : 0;
+        const primaryDuration = activeInvestmentPackages.length > 0 ? (activeInvestmentPackages[0].durationDays || 100) : 100;
+        const remainingDays = activeInvestmentPackages.length > 0 ? Math.max(0, primaryDuration - primaryDaysElapsed) : '-';
+
+        openGenericModal(`Investasi (${lockedStr})`, `
+          <p>Dana modal yang dialokasikan dalam program investasi yield LTP.</p>
           <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-lg space-y-1.5 font-mono text-xs my-2">
-            <div class="flex justify-between"><span>Status Kontrak:</span><span class="text-amber-400 font-bold">FULL LOCK-UP 100 HARI</span></div>
-            <div class="flex justify-between"><span>Profit Harian (1%):</span><span class="text-emerald-400 font-bold">+$${dailyYield.toFixed(2)} USD / hari</span></div>
-            <div class="flex justify-between"><span>Sisa Waktu Kontrak:</span><span class="text-amber-400 font-bold">62 Hari Lagi</span></div>
-            <div class="flex justify-between border-t border-white/10 pt-1"><span>Pencairan Total:</span><span class="text-white font-bold">Modal + Profit di Hari ke-100</span></div>
+            <div class="flex justify-between"><span>Status:</span><span class="text-amber-400 font-bold">${activeInvestmentPackages.length > 0 ? 'AKTIF' : 'BELUM ADA PAKET'}</span></div>
+            <div class="flex justify-between"><span>Profit Harian (1%):</span><span class="text-emerald-400 font-bold">+$${dailyYield.toFixed(2)} / hari</span></div>
+            <div class="flex justify-between"><span>Sisa Waktu:</span><span class="text-amber-400 font-bold">${typeof remainingDays === 'number' ? remainingDays + ' Hari Lagi' : '-'}</span></div>
+            <div class="flex justify-between border-t border-white/10 pt-1"><span>Pencairan Total:</span><span class="text-white font-bold">Modal + Profit saat Selesai Kontrak</span></div>
           </div>
           <button onclick="closeGenericModal(); switchTab('tab-invest');" class="w-full mt-2 py-2 rounded-lg bg-amber-500 text-black font-bold">Buka Halaman Investasi</button>
         `);
@@ -2685,12 +2980,12 @@
       openGenericModal('Ringkasan Portofolio Keseluruhan', `
         <div class="space-y-2 text-xs">
           <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Total Saldo Portofolio:</span><strong class="font-mono text-emerald-400">${totalStr}</strong></div>
-          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Saldo Deposit Bebas (Siap WD):</span><strong class="font-mono text-white">${depStr}</strong></div>
-          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Komisi Profit (100 Hari):</span><strong class="font-mono text-amber-400">${profitStr} (Terkunci Hari 100)</strong></div>
-          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Kunci Dana (100 Hari):</span><strong class="font-mono text-amber-400">${lockedStr} (Terkunci Hari 100)</strong></div>
+          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Saldo Tersedia (Siap Transaksi):</span><strong class="font-mono text-white">${depStr}</strong></div>
+          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Komisi Profit:</span><strong class="font-mono text-amber-400">${profitStr}</strong></div>
+          <div class="flex justify-between border-b border-white/5 pb-1.5"><span>Investasi:</span><strong class="font-mono text-amber-400">${lockedStr}</strong></div>
           <div class="pt-2 border-t border-emerald-500/30 flex justify-between text-sm font-bold">
-            <span>Saldo Bebas Siap Ditarik:</span>
-            <span class="text-emerald-400 font-mono">${depStr} USD</span>
+            <span>Saldo Tersedia:</span>
+            <span class="text-emerald-400 font-mono">${depStr}</span>
           </div>
         </div>
       `);
@@ -2740,18 +3035,17 @@
     // ==============================================
     // 6. INVESTMENT STATE & ENGINE (100 HARI & 1% PROFIT)
     // ==============================================
-    let activeInvestmentPackages = [
-      {
-        id: "LTP-VAULT-001",
-        name: "LTP 100-Day Yield Vault #1",
-        amount: 2500.00,
-        dailyRate: 0.01,
-        durationDays: 100,
-        daysElapsed: 38,
-        startDate: new Date(Date.now() - 38 * 24 * 60 * 60 * 1000).toISOString(),
-        targetMaturityTimestamp: Date.now() + (62 * 24 * 60 * 60 * 1000)
+
+    function toggleSimulatorCollapse() {
+      const content = document.getElementById('simulatorCollapseContent');
+      const chevron = document.getElementById('simulatorChevron');
+      if (content) {
+        content.classList.toggle('hidden');
       }
-    ];
+      if (chevron) {
+        chevron.classList.toggle('rotate-180');
+      }
+    }
 
     function calculateInvestPreview() {
       const inputEl = document.getElementById('investInputAmount');
@@ -2761,16 +3055,16 @@
       const totalReturn = amt + totalProfit;
 
       const prevModal = document.getElementById('previewInvestModal');
-      if (prevModal) prevModal.innerText = '$' + amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+      if (prevModal) prevModal.innerText = '$' + amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const prevDaily = document.getElementById('previewInvestDaily');
-      if (prevDaily) prevDaily.innerText = '+$' + dailyProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD / hari';
+      if (prevDaily) prevDaily.innerText = '+$' + dailyProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' / hari';
 
       const prevProfit = document.getElementById('previewInvestProfit');
-      if (prevProfit) prevProfit.innerText = '+$' + totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+      if (prevProfit) prevProfit.innerText = '+$' + totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const prevTotal = document.getElementById('previewInvestTotal');
-      if (prevTotal) prevTotal.innerText = '$' + totalReturn.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+      if (prevTotal) prevTotal.innerText = '$' + totalReturn.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function setInvestPreset(val) {
@@ -2802,7 +3096,7 @@
       }
 
       if (amt > userWallet.deposit) {
-        showToast(`Saldo Deposit tidak mencukupi! Saldo deposit Anda: $${userWallet.deposit.toFixed(2)} USD. Silakan Top Up terlebih dahulu.`, 'error');
+        showToast(`Saldo Tersedia tidak mencukupi! Saldo Anda: $${userWallet.deposit.toFixed(2)}. Silakan Top Up terlebih dahulu.`, 'error');
         playAudioEffect('error');
         return;
       }
@@ -2816,7 +3110,7 @@
       const nextIdNum = activeInvestmentPackages.length + 1;
       const newPkg = {
         id: `LTP-VAULT-00${nextIdNum}`,
-        name: `LTP 100-Day Yield Vault #${nextIdNum}`,
+        name: `Paket Investasi #${nextIdNum}`,
         amount: amt,
         dailyRate: 0.01,
         durationDays: 100,
@@ -2826,14 +3120,36 @@
       };
       activeInvestmentPackages.push(newPkg);
 
+      // Record transaction
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+      const newTx = {
+        id: 'TX' + Math.floor(1000 + Math.random() * 9000),
+        type: 'invest',
+        title: `Investasi Paket #${nextIdNum}`,
+        amount: `-$${amt.toFixed(2)}`,
+        status: 'Aktif',
+        badgeClass: 'bg-emerald-500/15 text-emerald-400',
+        icon: '🔒',
+        timeStr,
+        dateStr,
+        timestamp: Date.now()
+      };
+      recordTransaction(newTx);
+      saveActiveUserData();
+
       // 4. Update UI & Balance
       updateAllBalanceDisplays();
       renderInvestTabUI();
+      renderPortfolioGraph();
       playAudioEffect('success');
-      showToast(`🎉 Berhasil! Investasi $${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD telah dikunci selama 100 hari (Profit 1.0%/hari).`, 'success');
+      showToast(`🎉 Berhasil! Investasi $${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })} telah aktif (Imbal hasil 1.0%/hari selama 100 hari).`, 'success');
       
       if (inputEl) {
-        inputEl.value = '500';
+        inputEl.value = '100';
         calculateInvestPreview();
       }
     }
@@ -2857,8 +3173,30 @@
         }
       });
 
+      // Record transaction
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+      const newTx = {
+        id: 'TX' + Math.floor(1000 + Math.random() * 9000),
+        type: 'profit',
+        title: 'Profit Harian 1.0% (Terkunci)',
+        amount: `+$${dailyYield.toFixed(2)} USD`,
+        status: 'Sukses',
+        badgeClass: 'bg-emerald-500/15 text-emerald-400',
+        icon: '↓',
+        timeStr,
+        dateStr,
+        timestamp: Date.now()
+      };
+      recordTransaction(newTx);
+      saveActiveUserData();
+
       updateAllBalanceDisplays();
       renderInvestTabUI();
+      renderPortfolioGraph();
       playAudioEffect('success');
 
       showToast(`🔒 Profit Harian +$${dailyYield.toFixed(2)} USD (1.0%) berhasil dikumpulkan ke Komisi Profit! (Terkunci bersama modal hingga Hari ke-100).`, 'success');
@@ -2914,7 +3252,7 @@
 
       const investAvailDepEl = document.getElementById('investAvailableDeposit');
       if (investAvailDepEl) {
-        investAvailDepEl.innerText = '$' + userWallet.deposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+        investAvailDepEl.innerText = '$' + userWallet.deposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       }
 
       const simLockedRef = document.getElementById('simLockedAmountRef');
@@ -2955,21 +3293,25 @@
 
       const progressDaysText = document.getElementById('investProgressDaysText');
       if (progressDaysText) {
-        progressDaysText.innerText = `Hari ke-${primaryDaysElapsed} / ${primaryDuration}`;
+        progressDaysText.innerText = activeInvestmentPackages.length > 0 ? `Hari ke-${primaryDaysElapsed} / ${primaryDuration}` : `Hari ke-0 / 100`;
       }
 
       const remainingDays = Math.max(0, primaryDuration - primaryDaysElapsed);
       const remainingDaysText = document.getElementById('investRemainingDaysText');
       if (remainingDaysText) {
-        remainingDaysText.innerText = `Sisa ${remainingDays} Hari Lagi`;
+        remainingDaysText.innerText = activeInvestmentPackages.length > 0 ? `Sisa ${remainingDays} Hari Lagi` : `0 Paket Aktif`;
       }
 
       const homeCardRemaining = document.getElementById('homeCardLockedRemaining');
       if (homeCardRemaining) {
-        homeCardRemaining.innerText = `⏱️ Sisa ${remainingDays} Hari`;
+        if (activeInvestmentPackages.length > 0) {
+          homeCardRemaining.innerText = `Sisa waktu: ${remainingDays} Hari`;
+        } else {
+          homeCardRemaining.innerText = `Sisa waktu: -`;
+        }
       }
 
-      const pct = Math.min(100, Math.round((primaryDaysElapsed / primaryDuration) * 100));
+      const pct = activeInvestmentPackages.length > 0 ? Math.min(100, Math.round((primaryDaysElapsed / primaryDuration) * 100)) : 0;
       const progressPctText = document.getElementById('investProgressPctText');
       if (progressPctText) {
         progressPctText.innerText = `${pct}% Selesai`;
@@ -2982,7 +3324,7 @@
 
       const activeCountBadge = document.getElementById('activeInvestCountBadge');
       if (activeCountBadge) {
-        activeCountBadge.innerText = `● ${activeInvestmentPackages.length} PAKET BERJALAN`;
+        activeCountBadge.innerText = `${activeInvestmentPackages.length} PAKET AKTIF`;
       }
 
       const pkgCountText = document.getElementById('packageCountText');
@@ -3064,25 +3406,16 @@
 
       const wdMaxHelper = document.getElementById('wdMaxHelper');
       if (wdMaxHelper) wdMaxHelper.innerText = availWdTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      calculateInvestPreview();
     }
 
     // ==============================================
     // 7. REAL-TIME BINARY OPTION TRADING ENGINE
     // ==============================================
 
-    // Reactive Global Wallet State (Single Source of Truth)
-    // Induk Rumus: Total Saldo = Saldo Deposit ($5,000.00) + Komisi Profit ($1,820.50) + Kunci Dana ($2,500.00) = $9,320.50
+    // Reactive Global Wallet Rate (Single Source of Truth)
     const USD_TO_IDR_RATE = 15800;
-
-    const userWallet = {
-      deposit: 5000.00,
-      profit: 1820.50,
-      locked: 2500.00
-    };
-
-    function getTotalBalance() {
-      return userWallet.deposit + userWallet.profit + userWallet.locked;
-    }
 
     function updateAllBalanceDisplays() {
       const total = getTotalBalance();
@@ -3099,17 +3432,13 @@
         if (isBalanceHidden) {
           totalBalEl.innerText = '••••••••••';
         } else {
-          totalBalEl.innerText = `${totalStr} USD`;
+          totalBalEl.innerText = totalStr;
         }
       }
 
       const idrEstEl = document.getElementById('totalBalanceIdrEst');
       if (idrEstEl) {
-        if (isBalanceHidden) {
-          idrEstEl.innerHTML = '••••••••••••••••••••';
-        } else {
-          idrEstEl.innerHTML = `≈ Rp ${totalIdr} IDR <span class="text-emerald-400 text-[11px] font-semibold">(Kurs $1 = Rp 15.800)</span>`;
-        }
+        idrEstEl.innerHTML = '';
       }
 
       // 2. Rincian Saldo (4 Grid Cards)
@@ -3140,7 +3469,7 @@
       // 3. Trade Views Available Balance
       const tradeBalEl = document.getElementById('tradeAvailableBalance');
       if (tradeBalEl) {
-        tradeBalEl.innerText = depositStr + ' USD';
+        tradeBalEl.innerText = depositStr;
       }
 
       const controlBalEl = document.getElementById('controlAvailableBal');
@@ -3278,6 +3607,15 @@
     let tradeTimerInterval = null;
     let chartAnimationId = null;
 
+    // Technical Analysis & Trade Markers State
+    let currentChartTimeframe = '1m';
+    let currentChartType = 'candles'; // 'candles' or 'line'
+    let activeIndicators = {
+      ma: true,
+      rsi: false
+    };
+    let completedTradeMarkers = []; // stores recent settled trades with visual chart markers
+
     // Helper: format price with decimals
     function formatAssetPrice(price, decimals) {
       return price.toLocaleString('en-US', {
@@ -3286,19 +3624,23 @@
       });
     }
 
-    // Initialize asset history with 35 realistic candlestick bars
+    // Initialize asset history with realistic candlestick bars
     function seedAssetHistories() {
+      const barCount = currentChartTimeframe === '1h' ? 45 : currentChartTimeframe === '15m' ? 40 : 35;
+      const stepMultiplier = currentChartTimeframe === '1h' ? 2.5 : currentChartTimeframe === '15m' ? 1.8 : currentChartTimeframe === '5m' ? 1.3 : 1.0;
+
       Object.keys(marketAssets).forEach(k => {
         const asset = marketAssets[k];
         asset.candles = [];
-        let p = asset.basePrice - (asset.step * 10);
-        for (let i = 0; i < 35; i++) {
+        const step = asset.step * stepMultiplier;
+        let p = asset.basePrice - (step * 8);
+        for (let i = 0; i < barCount; i++) {
           const open = p;
           const isBull = Math.random() > 0.48;
-          const delta = (Math.random() * 0.9 + 0.1) * asset.step * (isBull ? 1 : -1);
+          const delta = (Math.random() * 0.9 + 0.1) * step * (isBull ? 1 : -1);
           const close = Math.max(open * 0.9, open + delta);
-          const wickTop = Math.random() * asset.step * 0.5;
-          const wickBottom = Math.random() * asset.step * 0.5;
+          const wickTop = Math.random() * step * 0.45;
+          const wickBottom = Math.random() * step * 0.45;
           const high = Math.max(open, close) + wickTop;
           const low = Math.min(open, close) - wickBottom;
           
@@ -3308,12 +3650,85 @@
         asset.currentPrice = p;
         asset.currentCandle = {
           open: p,
-          high: p + (asset.step * 0.2),
-          low: p - (asset.step * 0.2),
+          high: p + (step * 0.2),
+          low: p - (step * 0.2),
           close: p,
           ticks: 0
         };
       });
+    }
+
+    // Technical Analysis: Timeframe Switching
+    function setChartTimeframe(tf) {
+      currentChartTimeframe = tf;
+      playAudioEffect('click');
+
+      document.querySelectorAll('.tf-btn').forEach(b => {
+        b.className = 'tf-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent transition-all text-[10px]';
+      });
+      const activeBtn = document.getElementById(`tf-btn-${tf}`);
+      if (activeBtn) {
+        activeBtn.className = 'tf-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40 transition-all text-[10px]';
+      }
+
+      const wm = document.getElementById('chartTimeframeWatermark');
+      if (wm) {
+        wm.innerText = `TF: ${tf.toUpperCase()} LIVE`;
+      }
+
+      seedAssetHistories();
+      showToast(`Timeframe diubah ke ${tf.toUpperCase()}`, 'info');
+    }
+
+    // Technical Analysis: Chart Type Switching (Candles vs Line)
+    function setChartType(type) {
+      currentChartType = type;
+      playAudioEffect('click');
+
+      const cBtn = document.getElementById('chart-type-candles');
+      const lBtn = document.getElementById('chart-type-line');
+
+      if (type === 'candles') {
+        if (cBtn) cBtn.className = 'chart-type-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px] flex items-center space-x-1 transition-all';
+        if (lBtn) lBtn.className = 'chart-type-btn px-1.5 py-0.5 rounded text-gray-400 hover:text-white text-[9px] flex items-center space-x-1 transition-all';
+        showToast('Tampilan Lilin Candlestick aktif', 'info');
+      } else {
+        if (cBtn) cBtn.className = 'chart-type-btn px-1.5 py-0.5 rounded text-gray-400 hover:text-white text-[9px] flex items-center space-x-1 transition-all';
+        if (lBtn) lBtn.className = 'chart-type-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px] flex items-center space-x-1 transition-all';
+        showToast('Tampilan Grafik Garis (Line) aktif', 'info');
+      }
+    }
+
+    // Technical Analysis: Indicator Toggles (MA & RSI)
+    function toggleIndicator(indKey) {
+      playAudioEffect('click');
+      activeIndicators[indKey] = !activeIndicators[indKey];
+
+      if (indKey === 'ma') {
+        const btn = document.getElementById('ind-btn-ma');
+        const legend = document.getElementById('maLegendDisplay');
+        if (activeIndicators.ma) {
+          if (btn) btn.className = 'ind-btn px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 text-[9px] transition-all';
+          if (legend) legend.classList.remove('hidden');
+          showToast('Indikator MA(7) Diaktifkan', 'info');
+        } else {
+          if (btn) btn.className = 'ind-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent text-[9px] transition-all';
+          if (legend) legend.classList.add('hidden');
+          showToast('Indikator MA(7) Dinonaktifkan', 'info');
+        }
+      } else if (indKey === 'rsi') {
+        const btn = document.getElementById('ind-btn-rsi');
+        const legend = document.getElementById('rsiLegendDisplay');
+        if (activeIndicators.rsi) {
+          if (btn) btn.className = 'ind-btn px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40 text-[9px] transition-all';
+          if (legend) legend.classList.remove('hidden');
+          showToast('Indikator RSI(14) Diaktifkan', 'info');
+        } else {
+          if (btn) btn.className = 'ind-btn px-1.5 py-0.5 rounded bg-white/5 text-gray-400 hover:text-white border border-transparent text-[9px] transition-all';
+          if (legend) legend.classList.add('hidden');
+          showToast('Indikator RSI(14) Dinonaktifkan', 'info');
+        }
+      }
     }
 
     // Select Trade Asset
@@ -3356,6 +3771,24 @@
       recalculateBinaryPayout();
     }
 
+    // Dynamic Active Preset Highlighting
+    function updateInvestPresetHighlights(amt, isMax = false) {
+      document.querySelectorAll('.invest-preset-btn').forEach(btn => {
+        btn.className = 'invest-preset-btn py-1 rounded-md bg-[#181920] hover:bg-white/10 border border-white/5 text-[10px] font-mono font-bold text-gray-300 transition-all';
+      });
+      if (isMax) {
+        const maxBtn = document.getElementById('preset-btn-max');
+        if (maxBtn) {
+          maxBtn.className = 'invest-preset-btn py-1 rounded-md bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-[10px] font-mono font-bold text-amber-400 transition-all';
+        }
+      } else {
+        const activeBtn = document.getElementById(`preset-btn-${amt}`);
+        if (activeBtn) {
+          activeBtn.className = 'invest-preset-btn py-1 rounded-md bg-emerald-500/20 border border-emerald-500/50 text-[10px] font-mono font-bold text-emerald-400 transition-all';
+        }
+      }
+    }
+
     // Step Investment Amount
     function stepInvestAmount(delta) {
       playAudioEffect('click');
@@ -3365,6 +3798,7 @@
       if (currentVal < 5) currentVal = 5;
       if (currentVal > userWallet.deposit) currentVal = Math.max(5, userWallet.deposit);
       input.value = currentVal;
+      updateInvestPresetHighlights(currentVal, false);
       recalculateBinaryPayout();
     }
 
@@ -3372,7 +3806,8 @@
     function setInvestPreset(val) {
       playAudioEffect('click');
       const input = document.getElementById('binaryInvestAmount');
-      input.value = val;
+      if (input) input.value = val;
+      updateInvestPresetHighlights(val, false);
       recalculateBinaryPayout();
     }
 
@@ -3380,7 +3815,9 @@
     function setInvestMax() {
       playAudioEffect('click');
       const input = document.getElementById('binaryInvestAmount');
-      input.value = Math.max(5, Math.floor(userWallet.deposit));
+      const maxVal = Math.max(5, Math.floor(userWallet.deposit || 0));
+      if (input) input.value = maxVal;
+      updateInvestPresetHighlights(maxVal, true);
       recalculateBinaryPayout();
     }
 
@@ -3469,27 +3906,10 @@
         startTime: Date.now()
       };
 
-      // Show Active Trade Banner
-      const banner = document.getElementById('activeTradeBanner');
-      banner.classList.remove('hidden');
-      document.getElementById('activeTradeStrikePrice').innerText = '$' + formatAssetPrice(strikePrice, asset.decimals);
-      document.getElementById('activeTradeLivePrice').innerText = '$' + formatAssetPrice(strikePrice, asset.decimals);
-      document.getElementById('activeTradeInvestAmt').innerText = '$' + investAmt.toFixed(2);
-
-      const dirBadge = document.getElementById('activeTradeDirectionBadge');
-      if (direction === 'CALL') {
-        dirBadge.className = 'px-2 py-0.5 rounded font-bold font-mono text-xs bg-emerald-500 text-black';
-        dirBadge.innerText = 'CALL / HIGHER ▲';
-      } else {
-        dirBadge.className = 'px-2 py-0.5 rounded font-bold font-mono text-xs bg-rose-500 text-white';
-        dirBadge.innerText = 'PUT / LOWER ▼';
-      }
-
-      // Update countdown progress & disable buttons
-      updateTradeCountdownUI();
+      // Disable buttons during active trade
       toggleTradeButtons(false);
 
-      showToast(`⚡ Posisi ${direction} $${investAmt} pada ${currentTradeAsset} berhasil dikunci di Strike Price $${formatAssetPrice(strikePrice, asset.decimals)}`, 'success');
+      showToast(`⚡ Posisi ${direction} $${investAmt} (${currentTradeAsset}) terkunci di Strike: $${formatAssetPrice(strikePrice, asset.decimals)}`, 'success');
 
       // Start 1s countdown timer
       clearInterval(tradeTimerInterval);
@@ -3500,49 +3920,12 @@
         }
 
         activeTrade.remaining--;
-        updateTradeCountdownUI();
 
         if (activeTrade.remaining <= 0) {
           clearInterval(tradeTimerInterval);
           settleBinaryTrade();
         }
       }, 1000);
-    }
-
-    // Update Countdown Timer & In-The-Money condition
-    function updateTradeCountdownUI() {
-      if (!activeTrade) return;
-
-      const mins = Math.floor(activeTrade.remaining / 60);
-      const secs = activeTrade.remaining % 60;
-      const formattedTime = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-      
-      const countdownEl = document.getElementById('activeTradeCountdown');
-      if (countdownEl) countdownEl.innerText = formattedTime;
-
-      // Progress bar
-      const progressPercent = (activeTrade.remaining / activeTrade.duration) * 100;
-      const progEl = document.getElementById('activeTradeProgressBar');
-      if (progEl) progEl.style.width = `${progressPercent}%`;
-
-      // Live price check
-      const asset = marketAssets[activeTrade.assetSymbol];
-      const livePrice = asset.currentPrice;
-      const liveEl = document.getElementById('activeTradeLivePrice');
-      if (liveEl) liveEl.innerText = '$' + formatAssetPrice(livePrice, asset.decimals);
-
-      // In the money check
-      const pnlBadge = document.getElementById('activeTradePnlBadge');
-      const isWin = (activeTrade.direction === 'CALL' && livePrice > activeTrade.strikePrice) ||
-                    (activeTrade.direction === 'PUT' && livePrice < activeTrade.strikePrice);
-
-      if (isWin) {
-        pnlBadge.className = 'text-xs font-extrabold font-mono text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40';
-        pnlBadge.innerText = 'IN THE MONEY (WIN ▲)';
-      } else {
-        pnlBadge.className = 'text-xs font-extrabold font-mono text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/40';
-        pnlBadge.innerText = 'OUT OF MONEY (LOSS ▼)';
-      }
     }
 
     // Toggle disabled state on Buy/Sell buttons
@@ -3591,20 +3974,43 @@
         userWallet.deposit += totalReturn;
         userWallet.profit += profit;
         playAudioEffect('win');
+        showToast(`🎉 Profit +$${profit.toFixed(2)} USD! (${activeTrade.assetSymbol} ${direction})`, 'success');
       } else if (result === 'TIE') {
         totalReturn = amount;
         userWallet.deposit += totalReturn;
         playAudioEffect('click');
+        showToast(`⚖️ Draw (Harga Sama). Saldo $${amount.toFixed(2)} USD dikembalikan.`, 'info');
       } else {
         profit = -amount;
         playAudioEffect('loss');
+        showToast(`📉 Trade Selesai: -$${amount.toFixed(2)} USD (${activeTrade.assetSymbol} ${direction})`, 'error');
       }
 
       updateAllBalanceDisplays();
 
-      // Record to Recent Binary Trade History
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+      // Record Visual Chart Close Position Marker
+      completedTradeMarkers.unshift({
+        id: activeTrade.id,
+        assetSymbol: activeTrade.assetSymbol,
+        direction: activeTrade.direction,
+        strikePrice: strikePrice,
+        closePrice: closePrice,
+        result: result, // 'WIN', 'LOSS', 'TIE'
+        profit: profit,
+        amount: amount,
+        timeStr: timeStr,
+        createdAt: Date.now()
+      });
+      if (completedTradeMarkers.length > 8) {
+        completedTradeMarkers.pop();
+      }
+
+      // Record to Recent Binary Trade History
       const historyTable = document.getElementById('binaryTradeHistoryTable');
       if (historyTable) {
         const newRow = document.createElement('tr');
@@ -3627,105 +4033,34 @@
       }
 
       // Record to Global Statement (Mutasi Laporan)
-      const txContainer = document.getElementById('txListContainer');
-      if (txContainer) {
-        const txDiv = document.createElement('div');
-        txDiv.className = 'bg-[#141418] border border-white/5 rounded-xl p-3 flex items-center justify-between text-xs animate-fadeIn';
-        const isWin = result === 'WIN';
-        txDiv.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-lg ${isWin ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center font-bold">
-              ${isWin ? '⚡' : '📉'}
-            </div>
-            <div>
-              <p class="font-bold text-white">Binary Trade: ${activeTrade.assetSymbol} (${direction})</p>
-              <p class="text-[10px] text-gray-500">Hari ini, ${timeStr} • #${activeTrade.id}</p>
-            </div>
-          </div>
-          <div class="text-right">
-            <p class="font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-rose-400'}">
-              ${isWin ? '+$' + profit.toFixed(2) : '-$' + amount.toFixed(2)} USD
-            </p>
-            <span class="text-[9px] ${isWin ? 'text-emerald-400/80' : 'text-rose-400/80'} uppercase font-semibold">
-              ${isWin ? 'PROFIT' : 'LOSS'}
-            </span>
-          </div>
-        `;
-        txContainer.insertBefore(txDiv, txContainer.firstChild);
-      }
-
-      // Populate & Display Binary Result Modal
-      const modal = document.getElementById('binaryResultModal');
-      const card = document.getElementById('binaryResultCard');
-      const icon = document.getElementById('binaryResultIcon');
-      const tag = document.getElementById('binaryResultTag');
-      const title = document.getElementById('binaryResultTitle');
-      const amtEl = document.getElementById('binaryResultAmount');
-
-      document.getElementById('modalResAssetPos').innerText = `${activeTrade.assetSymbol} • ${direction === 'CALL' ? 'CALL ▲' : 'PUT ▼'}`;
-      document.getElementById('modalResStrikePrice').innerText = '$' + formatAssetPrice(strikePrice, asset.decimals);
-      document.getElementById('modalResClosePrice').innerText = '$' + formatAssetPrice(closePrice, asset.decimals);
+      const isWin = result === 'WIN';
       
-      const diffVal = closePrice - strikePrice;
-      const diffEl = document.getElementById('modalResDiffPrice');
-      diffEl.innerText = `${diffVal >= 0 ? '+' : ''}${formatAssetPrice(diffVal, asset.decimals)} (${result === 'WIN' ? 'In The Money' : 'Out of Money'})`;
-      diffEl.className = result === 'WIN' ? 'font-bold text-emerald-400' : 'font-bold text-rose-400';
+      const newTx = {
+        id: activeTrade.id || ('TX' + Math.floor(1000 + Math.random() * 9000)),
+        type: isWin ? 'profit' : 'withdraw',
+        title: `Binary Trade: ${activeTrade.assetSymbol} (${direction})`,
+        amount: isWin ? `+$${profit.toFixed(2)} USD` : `-$${amount.toFixed(2)} USD`,
+        status: isWin ? 'Win / Profit' : (result === 'TIE' ? 'Tie' : 'Loss'),
+        badgeClass: isWin ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400',
+        icon: isWin ? '⚡' : '📉',
+        timeStr,
+        dateStr,
+        timestamp: Date.now()
+      };
+      recordTransaction(newTx);
+      saveActiveUserData();
+      renderPortfolioGraph();
 
-      document.getElementById('modalResDuration').innerText = `${activeTrade.duration} Detik`;
-      document.getElementById('modalResNewBalance').innerText = '$' + userWallet.deposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
-
-      if (result === 'WIN') {
-        card.className = 'w-full max-w-sm rounded-3xl p-5 sm:p-6 shadow-2xl border bg-[#0E1015]/95 backdrop-blur-xl border-emerald-500/50 relative overflow-hidden text-center transform transition-all duration-300 scale-100 opacity-100';
-        icon.className = 'w-16 h-16 mx-auto mb-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl shadow-lg';
-        icon.innerText = '🎉';
-        tag.className = 'text-[10px] font-mono uppercase tracking-widest font-extrabold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-        tag.innerText = 'PROFIT • IN THE MONEY';
-        title.innerText = 'Trading Berhasil!';
-        amtEl.className = 'text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400 my-2.5';
-        amtEl.innerText = `+$${profit.toFixed(2)} USD`;
-      } else if (result === 'TIE') {
-        card.className = 'w-full max-w-sm rounded-3xl p-5 sm:p-6 shadow-2xl border bg-[#0E1015]/95 backdrop-blur-xl border-amber-500/50 relative overflow-hidden text-center transform transition-all duration-300 scale-100 opacity-100';
-        icon.className = 'w-16 h-16 mx-auto mb-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl shadow-lg';
-        icon.innerText = '⚖️';
-        tag.className = 'text-[10px] font-mono uppercase tracking-widest font-extrabold px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30';
-        tag.innerText = 'DRAW / TIE • SALDO REFUND';
-        title.innerText = 'Harga Sama Persis';
-        amtEl.className = 'text-2xl sm:text-3xl font-extrabold font-mono text-amber-400 my-2.5';
-        amtEl.innerText = `$0.00 USD`;
-      } else {
-        card.className = 'w-full max-w-sm rounded-3xl p-5 sm:p-6 shadow-2xl border bg-[#0E1015]/95 backdrop-blur-xl border-rose-500/50 relative overflow-hidden text-center transform transition-all duration-300 scale-100 opacity-100';
-        icon.className = 'w-16 h-16 mx-auto mb-3 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-3xl shadow-lg';
-        icon.innerText = '📉';
-        tag.className = 'text-[10px] font-mono uppercase tracking-widest font-extrabold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
-        tag.innerText = 'LOSS • OUT OF THE MONEY';
-        title.innerText = 'Belum Beruntung';
-        amtEl.className = 'text-2xl sm:text-3xl font-extrabold font-mono text-rose-400 my-2.5';
-        amtEl.innerText = `-$${amount.toFixed(2)} USD`;
-      }
-
-      history.pushState({ modal: 'result', tab: currentActiveTab, type: 'modal' }, '', '#trade-result');
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        card.classList.remove('scale-95', 'opacity-0');
-        card.classList.add('scale-100', 'opacity-100');
-      }, 20);
-
-      // Clean up trade state
+      // Clean up trade state without modal blocking
       activeTrade = null;
-      document.getElementById('activeTradeBanner').classList.add('hidden');
       toggleTradeButtons(true);
     }
 
-    // Close Result Modal
+    // Close Result Modal (Safe fallback)
     function closeBinaryResultModal() {
       playAudioEffect('click');
       const modal = document.getElementById('binaryResultModal');
-      const card = document.getElementById('binaryResultCard');
-      card.classList.remove('scale-100', 'opacity-100');
-      card.classList.add('scale-95', 'opacity-0');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 250);
+      if (modal) modal.classList.add('hidden');
     }
 
     // Real-time Market Ticks & Dynamic Candlestick Engine (Runs every 700ms)
@@ -3855,7 +4190,21 @@
           if (allCandles[i].high > maxVal) maxVal = allCandles[i].high;
         }
 
-        // Add 6% vertical margin padding
+        // Include Active Trade Strike Price & Recent Completed Markers in scaling
+        if (activeTrade && activeTrade.assetSymbol === currentTradeAsset) {
+          if (activeTrade.strikePrice < minVal) minVal = activeTrade.strikePrice * 0.9992;
+          if (activeTrade.strikePrice > maxVal) maxVal = activeTrade.strikePrice * 1.0008;
+        }
+        completedTradeMarkers.forEach(m => {
+          if (m.assetSymbol === currentTradeAsset) {
+            if (m.strikePrice < minVal) minVal = m.strikePrice * 0.9992;
+            if (m.strikePrice > maxVal) maxVal = m.strikePrice * 1.0008;
+            if (m.closePrice < minVal) minVal = m.closePrice * 0.9992;
+            if (m.closePrice > maxVal) maxVal = m.closePrice * 1.0008;
+          }
+        });
+
+        // Add 8% vertical margin padding
         const buffer = (maxVal - minVal) * 0.08 || (asset.step * 2);
         minVal -= buffer;
         maxVal += buffer;
@@ -3894,32 +4243,7 @@
           ctx.fillText(formatAssetPrice(priceAtY, asset.decimals), width - paddingRight + 6, y + 3);
         }
 
-        // 2. Draw Active Trade Strike Price Line if trade active on this asset
-        if (activeTrade && activeTrade.assetSymbol === currentTradeAsset) {
-          const strikeY = getY(activeTrade.strikePrice);
-          const isWinning = (activeTrade.direction === 'CALL' && asset.currentPrice > activeTrade.strikePrice) ||
-                            (activeTrade.direction === 'PUT' && asset.currentPrice < activeTrade.strikePrice);
-
-          ctx.save();
-          ctx.setLineDash([5, 5]);
-          ctx.strokeStyle = isWinning ? '#10B981' : '#F43F5E';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(paddingLeft, strikeY);
-          ctx.lineTo(width - paddingRight, strikeY);
-          ctx.stroke();
-
-          // Strike Price Tag
-          ctx.fillStyle = isWinning ? '#10B981' : '#F43F5E';
-          ctx.fillRect(paddingLeft, strikeY - 10, 115, 20);
-          ctx.fillStyle = '#000000';
-          ctx.font = 'bold 9px monospace';
-          ctx.textAlign = 'left';
-          ctx.fillText(`STRIKE: ${formatAssetPrice(activeTrade.strikePrice, asset.decimals)}`, paddingLeft + 4, strikeY + 3);
-          ctx.restore();
-        }
-
-        // 3. Draw Candlestick Bars (Wick + Body)
+        // 2. Draw Price Data: Candlesticks vs Glowing Line Chart
         const candleCount = allCandles.length;
         const candleSlot = chartW / candleCount;
         const candleWidth = Math.max(3, Math.min(14, candleSlot * 0.72));
@@ -3928,40 +4252,400 @@
         let lastCX = 0;
         let lastColor = '#10B981';
 
-        for (let i = 0; i < candleCount; i++) {
-          const c = allCandles[i];
-          const cx = paddingLeft + (i + 0.5) * candleSlot;
-          const openY = getY(c.open);
-          const closeY = getY(c.close);
-          const highY = getY(c.high);
-          const lowY = getY(c.low);
+        if (currentChartType === 'line') {
+          // --- LINE CHART MODE WITH GRADIENT FILL ---
+          if (candleCount > 0) {
+            const firstCX = paddingLeft + 0.5 * candleSlot;
+            const firstCY = getY(allCandles[0].close);
 
-          const isBull = c.close >= c.open;
-          const color = isBull ? '#10B981' : '#F43F5E'; // Emerald vs Rose
+            // Area Gradient Underneath
+            const isBullMarket = allCandles[candleCount - 1].close >= allCandles[0].close;
+            const gradColor = isBullMarket ? '16, 185, 129' : '244, 63, 94';
 
-          // Draw Wick Line
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.moveTo(cx, highY);
-          ctx.lineTo(cx, lowY);
-          ctx.stroke();
+            ctx.save();
+            const fillGrad = ctx.createLinearGradient(0, paddingTop, 0, height - paddingBottom);
+            fillGrad.addColorStop(0, `rgba(${gradColor}, 0.25)`);
+            fillGrad.addColorStop(0.8, `rgba(${gradColor}, 0.03)`);
+            fillGrad.addColorStop(1, `rgba(${gradColor}, 0.0)`);
 
-          // Draw Body Box
-          const bodyTop = Math.min(openY, closeY);
-          const bodyHeight = Math.max(2, Math.abs(closeY - openY));
+            ctx.beginPath();
+            ctx.moveTo(firstCX, height - paddingBottom);
+            ctx.lineTo(firstCX, firstCY);
 
-          ctx.fillStyle = color;
-          ctx.fillRect(cx - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
+            for (let i = 1; i < candleCount; i++) {
+              const cx = paddingLeft + (i + 0.5) * candleSlot;
+              const cy = getY(allCandles[i].close);
+              ctx.lineTo(cx, cy);
+            }
+            const lastCandleCX = paddingLeft + (candleCount - 0.5) * candleSlot;
+            ctx.lineTo(lastCandleCX, height - paddingBottom);
+            ctx.closePath();
+            ctx.fillStyle = fillGrad;
+            ctx.fill();
+            ctx.restore();
 
-          if (i === candleCount - 1) {
-            lastCX = cx;
-            lastCloseY = closeY;
-            lastColor = color;
+            // Line Stroke
+            ctx.save();
+            ctx.strokeStyle = isBullMarket ? '#10B981' : '#F43F5E';
+            ctx.lineWidth = 2.2;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(firstCX, firstCY);
+            for (let i = 1; i < candleCount; i++) {
+              const cx = paddingLeft + (i + 0.5) * candleSlot;
+              const cy = getY(allCandles[i].close);
+              ctx.lineTo(cx, cy);
+            }
+            ctx.stroke();
+            ctx.restore();
+
+            lastCX = lastCandleCX;
+            lastCloseY = getY(allCandles[candleCount - 1].close);
+            lastColor = isBullMarket ? '#10B981' : '#F43F5E';
+          }
+        } else {
+          // --- CANDLESTICK CHART MODE ---
+          for (let i = 0; i < candleCount; i++) {
+            const c = allCandles[i];
+            const cx = paddingLeft + (i + 0.5) * candleSlot;
+            const openY = getY(c.open);
+            const closeY = getY(c.close);
+            const highY = getY(c.high);
+            const lowY = getY(c.low);
+
+            const isBull = c.close >= c.open;
+            const color = isBull ? '#10B981' : '#F43F5E'; // Emerald vs Rose
+
+            // Draw Wick Line
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx, highY);
+            ctx.lineTo(cx, lowY);
+            ctx.stroke();
+
+            // Draw Body Box
+            const bodyTop = Math.min(openY, closeY);
+            const bodyHeight = Math.max(2, Math.abs(closeY - openY));
+
+            ctx.fillStyle = color;
+            ctx.fillRect(cx - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
+
+            if (i === candleCount - 1) {
+              lastCX = cx;
+              lastCloseY = closeY;
+              lastColor = color;
+            }
           }
         }
 
-        // 4. Floating Price Guide Line to Right Margin & Pulsing Dot on Active Candle
+        // --- TECHNICAL INDICATOR 1: MOVING AVERAGE MA(7) OVERLAY ---
+        if (activeIndicators.ma && candleCount > 0) {
+          const maPeriod = 7;
+          ctx.save();
+          ctx.strokeStyle = '#F59E0B'; // Amber Gold
+          ctx.lineWidth = 1.8;
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+
+          let latestMAVal = 0;
+          for (let i = 0; i < candleCount; i++) {
+            let sum = 0;
+            let count = 0;
+            for (let j = Math.max(0, i - maPeriod + 1); j <= i; j++) {
+              sum += allCandles[j].close;
+              count++;
+            }
+            const maVal = sum / count;
+            const cx = paddingLeft + (i + 0.5) * candleSlot;
+            const maY = getY(maVal);
+
+            if (i === 0) ctx.moveTo(cx, maY);
+            else ctx.lineTo(cx, maY);
+
+            if (i === candleCount - 1) {
+              latestMAVal = maVal;
+            }
+          }
+          ctx.stroke();
+          ctx.restore();
+
+          // Update Top-Left MA Legend Tag
+          const maLeg = document.getElementById('maLegendDisplay');
+          if (maLeg) {
+            maLeg.innerHTML = `MA(7): <strong class="text-amber-400">$${formatAssetPrice(latestMAVal, asset.decimals)}</strong>`;
+          }
+        }
+
+        // --- TECHNICAL INDICATOR 2: RSI(14) OSCILLATOR SUB-PANEL ---
+        if (activeIndicators.rsi && candleCount > 1) {
+          const rsiPeriod = 14;
+          const rsiVals = [];
+          let gains = 0;
+          let losses = 0;
+
+          for (let i = 1; i < candleCount; i++) {
+            const diff = allCandles[i].close - allCandles[i - 1].close;
+            const g = diff > 0 ? diff : 0;
+            const l = diff < 0 ? Math.abs(diff) : 0;
+
+            if (i <= rsiPeriod) {
+              gains += g;
+              losses += l;
+              if (i === rsiPeriod) {
+                const avgG = gains / rsiPeriod;
+                const avgL = losses / rsiPeriod;
+                const rs = avgL === 0 ? 100 : avgG / avgL;
+                rsiVals.push(100 - (100 / (1 + rs)));
+              } else {
+                rsiVals.push(50);
+              }
+            } else {
+              const prevAvgG = gains / rsiPeriod;
+              const prevAvgL = losses / rsiPeriod;
+              const avgG = (prevAvgG * (rsiPeriod - 1) + g) / rsiPeriod;
+              const avgL = (prevAvgL * (rsiPeriod - 1) + l) / rsiPeriod;
+              gains = avgG * rsiPeriod;
+              losses = avgL * rsiPeriod;
+              const rs = avgL === 0 ? 100 : avgG / avgL;
+              rsiVals.push(100 - (100 / (1 + rs)));
+            }
+          }
+
+          while (rsiVals.length < candleCount) {
+            rsiVals.unshift(50);
+          }
+
+          const latestRSI = rsiVals[rsiVals.length - 1] || 50;
+
+          // Render Mini RSI Panel at Bottom of Canvas
+          const rsiH = 26;
+          const rsiTop = height - paddingBottom - rsiH;
+          const rsi70Y = rsiTop + rsiH * 0.3;
+          const rsi30Y = rsiTop + rsiH * 0.7;
+
+          ctx.save();
+          ctx.fillStyle = 'rgba(15, 16, 24, 0.75)';
+          ctx.fillRect(paddingLeft, rsiTop, chartW, rsiH);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.strokeRect(paddingLeft, rsiTop, chartW, rsiH);
+
+          // Overbought 70 dashed line
+          ctx.setLineDash([2, 2]);
+          ctx.strokeStyle = 'rgba(244, 63, 94, 0.5)';
+          ctx.beginPath();
+          ctx.moveTo(paddingLeft, rsi70Y);
+          ctx.lineTo(width - paddingRight, rsi70Y);
+          ctx.stroke();
+
+          // Oversold 30 dashed line
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+          ctx.beginPath();
+          ctx.moveTo(paddingLeft, rsi30Y);
+          ctx.lineTo(width - paddingRight, rsi30Y);
+          ctx.stroke();
+
+          // RSI 14 Line Curve (Purple)
+          ctx.setLineDash([]);
+          ctx.strokeStyle = '#C084FC';
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          for (let i = 0; i < candleCount; i++) {
+            const cx = paddingLeft + (i + 0.5) * candleSlot;
+            const rVal = Math.max(5, Math.min(95, rsiVals[i]));
+            const ry = rsiTop + rsiH * (1 - (rVal / 100));
+            if (i === 0) ctx.moveTo(cx, ry);
+            else ctx.lineTo(cx, ry);
+          }
+          ctx.stroke();
+          ctx.restore();
+
+          // Update Top-Left RSI Legend Tag
+          const rsiLeg = document.getElementById('rsiLegendDisplay');
+          if (rsiLeg) {
+            let status = 'Netral';
+            let colorCls = 'text-purple-400';
+            if (latestRSI >= 70) {
+              status = 'Overbought';
+              colorCls = 'text-rose-400';
+            } else if (latestRSI <= 30) {
+              status = 'Oversold';
+              colorCls = 'text-emerald-400';
+            }
+            rsiLeg.innerHTML = `RSI(14): <strong class="${colorCls}">${latestRSI.toFixed(1)} (${status})</strong>`;
+          }
+        }
+
+        // ========================================================
+        // 3. VISUAL PENANDA CLOSE POSITION (RECENT SETTLED TRADES)
+        // ========================================================
+        completedTradeMarkers.forEach((m, idx) => {
+          if (m.assetSymbol === currentTradeAsset && idx < 3) {
+            const strikeY = getY(m.strikePrice);
+            const closeY = getY(m.closePrice);
+            const isWin = m.result === 'WIN';
+            const isTie = m.result === 'TIE';
+            const resColor = isWin ? '#10B981' : (isTie ? '#F59E0B' : '#F43F5E');
+            const markerX = Math.max(paddingLeft + 60, lastCX - (idx + 1) * 36);
+
+            ctx.save();
+            // Connecting vertical guide line between strike and close
+            ctx.setLineDash([2, 3]);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(markerX, strikeY);
+            ctx.lineTo(markerX, closeY);
+            ctx.stroke();
+
+            // Strike Entry Point (Small Neutral Dot)
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#9CA3AF';
+            ctx.beginPath();
+            ctx.arc(markerX, strikeY, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Close Price Point (Glowing Color Dot)
+            ctx.fillStyle = resColor;
+            ctx.beginPath();
+            ctx.arc(markerX, closeY, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Result Badge Overlay (+PROFIT / -LOSS)
+            const badgeText = isWin ? `+${m.profit.toFixed(2)} WIN` : (isTie ? `DRAW` : `-${m.amount.toFixed(2)} LOSS`);
+            const bWidth = 84;
+            const bHeight = 17;
+            const bX = Math.min(width - paddingRight - bWidth - 4, markerX + 6);
+            const bY = Math.max(paddingTop + 2, Math.min(height - paddingBottom - bHeight - 2, closeY - bHeight / 2));
+
+            // Badge Box
+            ctx.fillStyle = 'rgba(10, 12, 18, 0.94)';
+            ctx.strokeStyle = resColor;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            if (ctx.roundRect) {
+              ctx.roundRect(bX, bY, bWidth, bHeight, 4);
+            } else {
+              ctx.rect(bX, bY, bWidth, bHeight);
+            }
+            ctx.fill();
+            ctx.stroke();
+
+            // Badge Text
+            ctx.fillStyle = resColor;
+            ctx.font = 'bold 8.5px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(badgeText, bX + bWidth / 2, bY + bHeight / 2);
+            ctx.restore();
+          }
+        });
+
+        // ========================================================
+        // 4. VISUAL PENANDA OPEN POSITION (ACTIVE TRADE IN FLIGHT)
+        // ========================================================
+        if (activeTrade && activeTrade.assetSymbol === currentTradeAsset) {
+          const strikeY = getY(activeTrade.strikePrice);
+          const isWinning = (activeTrade.direction === 'CALL' && asset.currentPrice > activeTrade.strikePrice) ||
+                            (activeTrade.direction === 'PUT' && asset.currentPrice < activeTrade.strikePrice);
+          const strikeColor = activeTrade.direction === 'CALL' ? '#10B981' : '#F43F5E';
+
+          ctx.save();
+          // A. Clean Thin Horizontal Dashed Strike Line
+          ctx.setLineDash([4, 3]);
+          ctx.strokeStyle = strikeColor;
+          ctx.lineWidth = 1.0;
+          ctx.beginPath();
+          ctx.moveTo(paddingLeft, strikeY);
+          ctx.lineTo(width - paddingRight, strikeY);
+          ctx.stroke();
+          ctx.restore();
+
+          // B. Strike Price Left Pill Badge (Thin & Minimal)
+          ctx.save();
+          const strikeText = `STRIKE: $${formatAssetPrice(activeTrade.strikePrice, asset.decimals)}`;
+          ctx.font = '600 9px monospace';
+          const textW = ctx.measureText(strikeText).width;
+          const strikePillW = textW + 12;
+          const strikePillH = 16;
+          const strikePillY = Math.max(paddingTop + 2, Math.min(height - paddingBottom - strikePillH, strikeY - strikePillH / 2));
+
+          ctx.fillStyle = '#10121A';
+          ctx.strokeStyle = strikeColor;
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(paddingLeft + 4, strikePillY, strikePillW, strikePillH, 3);
+          } else {
+            ctx.rect(paddingLeft + 4, strikePillY, strikePillW, strikePillH);
+          }
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = strikeColor;
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(strikeText, paddingLeft + 10, strikePillY + strikePillH / 2);
+          ctx.restore();
+
+          // C. Execution Marker Pin on Active Candle (Clean & Compact)
+          ctx.save();
+          const entryX = lastCX;
+
+          // Inner solid circle
+          ctx.beginPath();
+          ctx.arc(entryX, strikeY, 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = strikeColor;
+          ctx.fill();
+
+          // Direction arrow symbol
+          ctx.fillStyle = activeTrade.direction === 'CALL' ? '#000000' : '#FFFFFF';
+          ctx.font = 'bold 7.5px monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(activeTrade.direction === 'CALL' ? '▲' : '▼', entryX, strikeY);
+          ctx.restore();
+
+          // D. Floating Countdown Timer Pill Badge (Thin & Clean)
+          ctx.save();
+          const mins = Math.floor(activeTrade.remaining / 60);
+          const secs = activeTrade.remaining % 60;
+          const formattedTimer = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+          const pnlText = isWinning ? `WIN ▲` : `LOSS ▼`;
+
+          const timerBadgeW = 105;
+          const timerBadgeH = 16;
+          const timerX = Math.min(width - paddingRight - timerBadgeW - 6, Math.max(paddingLeft + strikePillW + 8, width * 0.45));
+          const timerY = strikeY - 20 < paddingTop + 4 ? strikeY + 10 : strikeY - 18;
+
+          ctx.fillStyle = '#10121A';
+          ctx.strokeStyle = isWinning ? '#10B981' : '#F43F5E';
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(timerX, timerY, timerBadgeW, timerBadgeH, 3);
+          } else {
+            ctx.rect(timerX, timerY, timerBadgeW, timerBadgeH);
+          }
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = '600 8.5px monospace';
+          ctx.textBaseline = 'middle';
+          // Timer icon & count
+          ctx.fillStyle = '#E2E8F0';
+          ctx.textAlign = 'left';
+          ctx.fillText(`⏱ ${formattedTimer}`, timerX + 6, timerY + timerBadgeH / 2);
+
+          // PnL indicator
+          ctx.fillStyle = isWinning ? '#10B981' : '#F43F5E';
+          ctx.textAlign = 'right';
+          ctx.fillText(pnlText, timerX + timerBadgeW - 6, timerY + timerBadgeH / 2);
+          ctx.restore();
+        }
+
+        // 5. Floating Price Guide Line to Right Margin & Pulsing Dot on Active Candle
         if (candleCount > 0) {
           ctx.save();
           ctx.setLineDash([3, 3]);
@@ -3999,13 +4683,17 @@
 
     // Filter Transactions
     function filterTransactions(type) {
+      currentTxFilter = type;
       document.querySelectorAll('.filter-tab').forEach(b => {
         b.classList.remove('bg-emerald-500', 'text-black', 'font-bold');
         b.classList.add('bg-[#141418]', 'text-gray-400');
       });
-      event.target.classList.add('bg-emerald-500', 'text-black', 'font-bold');
-      event.target.classList.remove('bg-[#141418]', 'text-gray-400');
-      showToast(`Menampilkan filter: ${type.toUpperCase()}`, 'info');
+      if (event && event.target) {
+        event.target.classList.add('bg-emerald-500', 'text-black', 'font-bold');
+        event.target.classList.remove('bg-[#141418]', 'text-gray-400');
+      }
+      renderTransactionsUI(type);
+      showToast(`Filter aktif: ${type.toUpperCase()}`, 'info');
     }
 
     // Utility: Copy to Clipboard
@@ -4064,18 +4752,32 @@
 
       // Check auth status & restore profile
       const isAuth = sessionStorage.getItem('ltp_authenticated');
+      let restoredUser = null;
       if (isAuth === 'true') {
         const authModal = document.getElementById('authModal');
         if (authModal) authModal.classList.add('hidden');
         
         try {
-          const savedUser = JSON.parse(localStorage.getItem('ltp_current_user') || 'null');
-          if (savedUser) {
-            applyUserProfileToUI(savedUser);
-          }
+          restoredUser = JSON.parse(localStorage.getItem('ltp_current_user') || 'null');
         } catch (e) {
           console.warn('Profile restore error:', e);
         }
+      }
+
+      if (restoredUser) {
+        loadUserSessionData(restoredUser);
+      } else {
+        // Pure $0.00 Live Account Default for initial display
+        loadUserSessionData({
+          fullName: "Pengguna Baru",
+          username: "user" + Math.floor(100 + Math.random() * 900),
+          contact: "",
+          uid: "LTP-" + Math.floor(1000000 + Math.random() * 9000000),
+          isDemo: false,
+          wallet: { deposit: 0.00, profit: 0.00, locked: 0.00 },
+          investmentPackages: [],
+          transactions: []
+        });
       }
 
       // Initialize Binary Trading Engine & Investment Engine
@@ -4092,4 +4794,3 @@
   </script>
 </body>
 </html>
-
